@@ -2,6 +2,7 @@
 1. [Introduction](#introduction)
 2. [Conceitos Iniciais](#conceitosIniciais)
     1. [Vantagens de CloudComputing](#vantagensCloudC)
+	2. [Cenários](#cenarios01)
 3. [Another paragraph](#paragraph2)
 
 ## This is the introduction <a name="introduction"></a>
@@ -26,11 +27,16 @@ Technology = Os serviços da AWS em sí
 Billing and Pricing = Precificação
 ```
 
+Tempo de prova: 90 min.
+Valor: $100
+Validade: 3 anos
+Não existe limitação de quais certificações primeiro entregar, pode ser feito em qualquer ordem.
+
 ## Principais Conceitos <a name="conceitosIniciais"></a>
 Principais conceitos de Cloud Computing e principais conceitos da nuvem da AWS como infra e acesso a nuvem da AWS
 
 Conceito cloud:
-	•	On demand
+	•	On demand delivery
 	•	entregue através de uma plataforma via internet
 	•	Precificação baseada em consumo (pay-as-you-go)
 
@@ -43,14 +49,27 @@ Vantagens:
 	•	Global em minutos
 
 Tipo de Cloud:
-	•	IaaS - Físico/Virtuais (Hospedagem)
-	•	Paas - DC responsável por tudo até a camada de software
-	•	SaaS - Utilização do serviço apenas (Office 365)
+	•	IaaS - Infrastructure as a Service, Físico/Virtuais (Hospedagem), Maximo controle sobre o funcionamento dos serviço(manutenção e etc).
+	•	Paas - DC responsável por tudo até a camada de software, Ex.: Wordpress. 
+	•	SaaS - Software as a Service, Utilização do serviço apenas (Office 365), mínimo controle.
 
 Tips de instalação:
 	•	Public Cloud - AWS, Azure (Pagamento On Demand)
 	•	Hybrid Cloud - Misto de Publica e privada (DC conectando na AWS)
 	•	Private Cloud - DC interno
+
+Elasticity:
+	- Possibilildade de adquirir/utilizar recursos de acordo com a demandae liberálos quando não precisar mais.
+
+Reliability - Confiança:
+	- Sempre disponível com recursos para seus clientes.
+
+Agility:
+	- Reduzir o tempo para manter a infraestrutura
+	- Diminuir o custo 
+	- Reduzir os riscos de segurança e compliance, através do modelo de responsabilidade compartilhada.
+	- Acesso a tecnologias emergentes
+
 
 ### Vantagens de CloudComputing <a name="vantagensCloudC"></a>
 Funcionamento de plataformas Cloud Computing
@@ -67,9 +86,15 @@ Pode existir em localidades que ainda não possuem regions
 Função caching, CDN -> CloudFront.
 Armazenamento estático geralmente.
 
-## Another paragraph <a name="paragraph2"></a>
-The second paragraph text
+### Cenários <a name="cenarios01"></a>
+1 - DC interno com VMWare para administração da infra, querem utilizar Aws + sua infra?
+==> Modelo de implementação Hybrid Cloud
 
+2 - Monetizar uma nova tecnologia emergente, nova infra. Qual o benefício de usar cloud?
+==> Pay as you Go.
+
+3 - Cia de seguros, considerando mover sua infra para cloud, com maximo controle. Qual o modelo de infra mais adequado?
+==> IaaS
 
 
 # 2. O que cai na prova
