@@ -3,7 +3,8 @@
 2. [Conceitos Iniciais](#conceitosIniciais)
     1. [Aws Global Infrastructure](#GlobalInfra)
 	2. [Cloud Economics](#CloudEconomics)
-	3. [Cenários](#cenarios01)
+	3. [Supporting Aws Infrastrtucture](#SupAwsInfra)
+	4. [Cenários](#cenarios01)
 3. [Another paragraph](#paragraph2)
 
 ## Introduction <a name="introduction"></a>
@@ -165,6 +166,27 @@ Desacoplar, melhor prática
 Consolidating billing
 Faz agrupamento do faturamento das contas
 
+### Supporting Aws Infrastructure <a name="SupAwsInfra"></a>
+Ferramentas de suporte da Aws:
+```
+	•	AWS Trusted Advisor - acesse as 7 principais verificações(Cost Optimization, Performance, Security, Fault Tolerance,Service Limits) e orientações do Trusted Advisor para provisionar seus recursos seguindo as práticas recomendadas para aumentar o desempenho e melhorar a segurança.
+
+	•	AWS Personal Health Dashboard - Uma visão personalizada da saúde dos serviços da AWS e alertas quando seus recursos são afetados. Este plano não oferece suporte a nenhuma orientação arquitetônica.
+
+	- Assistentes para migrações vindo da Aws: Aws Quick Starts, Aws Partner Network Consulting Partness..
+```
+
+Planos de suporte AWS
+```
+	•	Basic - O plano básico fornece acesso apenas ao seguinte: Atendimento ao cliente e comunidades - acesso 24 horas por dia, 7 dias por semana ao atendimento ao cliente, documentação, white papers, fóruns de suporte e Trusted Advisor. Sem custo mensal.
+
+	•	Developer - a AWS recomenda o suporte ao desenvolvedor se você estiver testando ou desenvolvendo antecipadamente na AWS e quiser obter suporte técnico por e-mail durante o horário comercial, bem como orientação geral de arquitetura durante a construção e o teste. Você não obtém acesso ao Gerenciamento de eventos de infraestrutura com este plano. Este plano oferece suporte apenas para orientações gerais de arquitetura. Começa com $29.
+
+	•	Business - a AWS recomenda o suporte de negócios se você tiver cargas de trabalho de produção na AWS e quiser acesso 24x7 por telefone, e-mail e chat para suporte técnico e orientação arquitetônica no contexto de seus casos de uso específicos. Você obtém acesso total às Verificações de práticas recomendadas do AWS Trusted Advisor. Você também obtém acesso ao Gerenciamento de eventos de infraestrutura por uma taxa adicional. Começa com $100.
+
+	•	Enterprise - O AWS Enterprise Support oferece aos clientes serviços semelhantes aos de concierge, em que o foco principal é ajudar o cliente a alcançar seus resultados e ter sucesso na nuvem. Com o Enterprise Support, você obtém suporte técnico 24 horas por dia, 7 dias por semana, de engenheiros de alta qualidade, ferramentas e tecnologia para gerenciar automaticamente a integridade do seu ambiente, revisão consultiva e orientação com base em seus aplicativos e um Gerente Técnico de Conta (TAM) designado para coordenar o acesso ao proativo / programas preventivos e especialistas no assunto da AWS. Este plano oferece suporte à orientação arquitetônica contextual à sua aplicação.
+```
+
 ### Cenários <a name="cenarios01"></a>
 1 - DC interno com VMWare para administração da infra, querem utilizar Aws + sua infra?
 ==> Modelo de implementação Hybrid Cloud
@@ -193,20 +215,19 @@ Faz agrupamento do faturamento das contas
 8 - X quer mover seu site para a Cloud e quer saber quanto sairá a infraestrutura para isso na Aws. Onde é possível ter esse levantamento?
 ==> Aws Pricing Calculator
 
+9 - X quer migrar sua aplicação para Aws, precisa de 100% de disponibilidade e de 24h/7 de suporte por ligação. Qual o plano mais economico indicado?
+==> Business Support
+
+10 - Empresa X possui diversos polos pelo Mundo, precisa de disponibilidade para ligações/texto/email se algum problema ocorrer e com limite de tempo de resposta de até 15 min. Qual o plano de suporte adequado?
+==> Enterprise Support
+
+11 - x possui uma conta pessoal, nao precisa de suporte, mas quer acessar o Trusted Advisor. Qual o plano adequado?
+==> Basic Support
+
 # 2. O que cai na prova
 
 
-Níveis de suporte AWS
 
-	•	Basic - O plano básico fornece acesso apenas ao seguinte: Atendimento ao cliente e comunidades - acesso 24 horas por dia, 7 dias por semana ao atendimento ao cliente, documentação, white papers e fóruns de suporte.
-	•	AWS Trusted Advisor - acesse as 7 principais verificações e orientações do Trusted Advisor para provisionar seus recursos seguindo as práticas recomendadas para aumentar o desempenho e melhorar a segurança.
-	•	AWS Personal Health Dashboard - Uma visão personalizada da saúde dos serviços da AWS e alertas quando seus recursos são afetados. Este plano não oferece suporte a nenhuma orientação arquitetônica.
-
-	•	Developer - a AWS recomenda o suporte ao desenvolvedor se você estiver testando ou desenvolvendo antecipadamente na AWS e quiser obter suporte técnico por e-mail durante o horário comercial, bem como orientação geral de arquitetura durante a construção e o teste. Você não obtém acesso ao Gerenciamento de eventos de infraestrutura com este plano. Este plano oferece suporte apenas para orientações gerais de arquitetura.
-
-	•	Business - a AWS recomenda o suporte de negócios se você tiver cargas de trabalho de produção na AWS e quiser acesso 24x7 por telefone, e-mail e chat para suporte técnico e orientação arquitetônica no contexto de seus casos de uso específicos. Você obtém acesso total às Verificações de práticas recomendadas do AWS Trusted Advisor. Você também obtém acesso ao Gerenciamento de eventos de infraestrutura por uma taxa adicional.
-
-	•	Enterprise - O AWS Enterprise Support oferece aos clientes serviços semelhantes aos de concierge, em que o foco principal é ajudar o cliente a alcançar seus resultados e ter sucesso na nuvem. Com o Enterprise Support, você obtém suporte técnico 24 horas por dia, 7 dias por semana, de engenheiros de alta qualidade, ferramentas e tecnologia para gerenciar automaticamente a integridade do seu ambiente, revisão consultiva e orientação com base em seus aplicativos e um Gerente Técnico de Conta (TAM) designado para coordenar o acesso ao proativo / programas preventivos e especialistas no assunto da AWS. Este plano oferece suporte à orientação arquitetônica contextual à sua aplicação.
 
 
 Core Services
