@@ -1,11 +1,12 @@
 # Indice de estudos para Aws Cloud Practitioner 
 1. [Introduction](#introduction)
 2. [Conceitos Iniciais](#conceitosIniciais)
-    1. [Vantagens de CloudComputing](#vantagensCloudC)
-	2. [Cenários](#cenarios01)
+    1. [Aws Global Infrastructure](#GlobalInfra)
+	2. [Cloud Economics](#CloudEconomics)
+	3. [Cenários](#cenarios01)
 3. [Another paragraph](#paragraph2)
 
-## This is the introduction <a name="introduction"></a>
+## Introduction <a name="introduction"></a>
 Habilidades validadas pela certificação
 
 ```python
@@ -36,27 +37,34 @@ Não existe limitação de quais certificações primeiro entregar, pode ser fei
 Principais conceitos de Cloud Computing e principais conceitos da nuvem da AWS como infra e acesso a nuvem da AWS
 
 Conceito cloud:
+```bash
 	•	On demand delivery
 	•	entregue através de uma plataforma via internet
 	•	Precificação baseada em consumo (pay-as-you-go)
-
+```
 Vantagens:
+```
 	•	Mudança na modalidade de gastos (CAPEx x OPEx) - Pague pelo que consumir
 	•	Economia de escala - AWS compra em grande escala, acarretando um preço menor ao usuário final
 	•	Capacidade - Crescer ou diminuir pagando apenas consumo
 	•	Agilidade e velocidade - Recursos disponíveis imediatamente
 	•	Economia - Foco no negócio
 	•	Global em minutos
+```
 
 Tipo de Cloud:
+```
 	•	IaaS - Infrastructure as a Service, Físico/Virtuais (Hospedagem), Maximo controle sobre o funcionamento dos serviço(manutenção e etc).
 	•	Paas - DC responsável por tudo até a camada de software, Ex.: Wordpress. 
 	•	SaaS - Software as a Service, Utilização do serviço apenas (Office 365), mínimo controle.
+```
 
 Tips de instalação:
+```
 	•	Public Cloud - AWS, Azure (Pagamento On Demand)
 	•	Hybrid Cloud - Misto de Publica e privada (DC conectando na AWS)
 	•	Private Cloud - DC interno
+```
 
 Elasticity:
 	- Possibilildade de adquirir/utilizar recursos de acordo com a demandae liberálos quando não precisar mais.
@@ -71,20 +79,91 @@ Agility:
 	- Acesso a tecnologias emergentes
 
 
-### Vantagens de CloudComputing <a name="vantagensCloudC"></a>
-Funcionamento de plataformas Cloud Computing
-Vantagens de Cloud computing
+### Aws Global Infrastructure <a name="GlobalInfra"></a>
+Funcionamento da infraestrutrura de Cloud Computing
 
-Alcance Global da AWS
+Regions and Availability:
+```
 	•	Regions - Onde a AWS esta fisicamente. Os DCs propriamente ditos
+	- Atualmente em +- 22 regiões
+	- Availabilitys zones: 1+ DC por regiões da Aws, +60 zones, entregando disponibilidade com menos propensão a falhas.
+	- Region Identifier: us-east-2a(area-subarea-NumeroAvailabilityZone)
+```
+
+Edge Locations - CDN:
+```
+	- CloudFront, modulos de entrega global de conteúdos
+	- Route53, DNS da Aws
+	- Presente em +200 locais, possibilitando que a Aws entregue o conteúdo de acordo com a localização do serviço, mesmo que este esteja configurado em uma região diferente. 
+
+```
+
 AWS NUNCA move/copia dados ou recursos entre regiões sem que o dono solicite isso explícitamente
 	•	AZ - Os DCs em cada região  (Em SP, 3 DCs)
 Alta disponibilidade, desempenho, tolerância a falhas, disaster recovery
-No mínimo 2
-	•	Edge Locations - DCs menores ( ou parceiros) e conectados nas AZs.
-Pode existir em localidades que ainda não possuem regions
-Função caching, CDN -> CloudFront.
-Armazenamento estático geralmente.
+
+### Understanding Cloud Economics <a name="CloudEconomics"></a>
+A melhor opção para quem não possui capital inicial e quer colocar sua aplicação no ar é o Pay-as-you-Go.
+
+Aws Cost Explorer:
+```bash
+- Previsão de gastos
+- organizado por serviços e por tag
+- pode ser acessado via interface e por API
+- AWS Budgets - oferece a capacidade de definir orçamentos personalizados que alertam você quando seus custos ou uso excedem (ou estão previstos para exceder) o valor orçado. Além de ver os custos atuais de utilização.
+- TCO - Total Cost of Ownership, Custo de migração para a nuvem com report para executivos. http://awstcocalculator.com
+- Simple Monthly Calculator - Calculadora mensal da AWS,possibilidade de calculos mais específicos
+```
+
+Aws Resource Tags:
+```
+ - Detalhamento de custo por tag, name/optionalvalue
+```
+
+AWS Organizations:
+```
+- Gerencia de multiplas contas através de uma conta master
+- Gestão de custos por conta
+```
+
+Preços na AWS: 
+```
+https://aws.amazon.com/pt/pricing/
+
+Preços são cobrados por computação, armazenamento e rede
+
+	•	Pay-as-you-go
+	•	Economize ao reservar (reserved)
+	•	Descontos na utilização continua - Quanto mais usa menos paga
+	•	Serviços com cobranças diferentes
+	•	Regiões podem ter preços diferenciados
+	•	Muitos serviços free tier
+
+Informações importantes a considerar
+	•	Dados de entrada não são cobrados
+	•	Dados de saída sempre são cobrados
+
+Transfer Acceleration - Cobrado a parte
+
+Free Tier
+
+	•	Sempre gratuito (Lambda, DynamoDB)
+	•	12 meses gratuitos (EC2, S3, RDS)
+	•	testes (SageMaker)
+	•	Não se aplica por serviço, mas sim, por conta
+```
+
+AWS Cost and Usage Reports
+Quanto tempo o recurso ficou no ar e a quantia cobrada ao longo do tempo
+
+Who has control of the data security in an AWS account?
+AWS Account Owner (Segurança dos dados é ligada ao customer)
+
+Decoupling
+Desacoplar, melhor prática
+
+Consolidating billing
+Faz agrupamento do faturamento das contas
 
 ### Cenários <a name="cenarios01"></a>
 1 - DC interno com VMWare para administração da infra, querem utilizar Aws + sua infra?
@@ -96,8 +175,39 @@ Armazenamento estático geralmente.
 3 - Cia de seguros, considerando mover sua infra para cloud, com maximo controle. Qual o modelo de infra mais adequado?
 ==> IaaS
 
+4 - Empresa em transição para Aws, armazenamento de dados em diversas áreas. Qual o benefício da Aws cobre as necessidades?
+===> Aws Regions
+
+5 - Site com alcance global,  procurão por performance de qualidade. Qual  elemento da Aws será usado?
+===>Aws Edge Location
+
+6 - Transição de Aplicação legada que precisa de 99% de disponibilidade. Qual elemento da Aws suporta essa necessidade?
+==> Aws Availability Zones, trás a segurança de possuir várias zonas por regiao.
+
+7 - Empresa quer separar os custos de cada conta de  acordo com o departamento. Qual abordagem atenderia a essa necessidade?
+==> Tag para o Depto.
+
+8 - X quer fazer a transição de um DC físico para a Cloud e quer saber quanto irá custar/economizar. Qual a melhor ferramenta?
+==>Aws TCO Calculator
+
+8 - X quer mover seu site para a Cloud e quer saber quanto sairá a infraestrutura para isso na Aws. Onde é possível ter esse levantamento?
+==> Aws Pricing Calculator
 
 # 2. O que cai na prova
+
+
+Níveis de suporte AWS
+
+	•	Basic - O plano básico fornece acesso apenas ao seguinte: Atendimento ao cliente e comunidades - acesso 24 horas por dia, 7 dias por semana ao atendimento ao cliente, documentação, white papers e fóruns de suporte.
+	•	AWS Trusted Advisor - acesse as 7 principais verificações e orientações do Trusted Advisor para provisionar seus recursos seguindo as práticas recomendadas para aumentar o desempenho e melhorar a segurança.
+	•	AWS Personal Health Dashboard - Uma visão personalizada da saúde dos serviços da AWS e alertas quando seus recursos são afetados. Este plano não oferece suporte a nenhuma orientação arquitetônica.
+
+	•	Developer - a AWS recomenda o suporte ao desenvolvedor se você estiver testando ou desenvolvendo antecipadamente na AWS e quiser obter suporte técnico por e-mail durante o horário comercial, bem como orientação geral de arquitetura durante a construção e o teste. Você não obtém acesso ao Gerenciamento de eventos de infraestrutura com este plano. Este plano oferece suporte apenas para orientações gerais de arquitetura.
+
+	•	Business - a AWS recomenda o suporte de negócios se você tiver cargas de trabalho de produção na AWS e quiser acesso 24x7 por telefone, e-mail e chat para suporte técnico e orientação arquitetônica no contexto de seus casos de uso específicos. Você obtém acesso total às Verificações de práticas recomendadas do AWS Trusted Advisor. Você também obtém acesso ao Gerenciamento de eventos de infraestrutura por uma taxa adicional.
+
+	•	Enterprise - O AWS Enterprise Support oferece aos clientes serviços semelhantes aos de concierge, em que o foco principal é ajudar o cliente a alcançar seus resultados e ter sucesso na nuvem. Com o Enterprise Support, você obtém suporte técnico 24 horas por dia, 7 dias por semana, de engenheiros de alta qualidade, ferramentas e tecnologia para gerenciar automaticamente a integridade do seu ambiente, revisão consultiva e orientação com base em seus aplicativos e um Gerente Técnico de Conta (TAM) designado para coordenar o acesso ao proativo / programas preventivos e especialistas no assunto da AWS. Este plano oferece suporte à orientação arquitetônica contextual à sua aplicação.
+
 
 Core Services
 
@@ -397,73 +507,7 @@ Firewall para aplicações web
 AWS Organizations
 Serviço que gerencia contas da AWS
 
-Cost Allocation Tag
-Detalhamento de custo por tag
 
-Preços na AWS
-https://aws.amazon.com/pt/pricing/
-
-Preços são cobrados por computação, armazenamento e rede
-
-	•	Pay-as-you-go
-	•	Economize ao reservar (reserved)
-	•	Descontos na utilização continua - Quanto mais usa menos paga
-	•	Serviços com cobranças diferentes
-	•	Regiões podem ter preços diferenciados
-	•	Muitos serviços free tier
-
-Informações importantes a considerar
-	•	Dados de entrada não são cobrados
-	•	Dados de saída sempre são cobrados
-
-#Transfer Acceleration - Cobrado a parte
-
-Free Tier
-
-	•	Sempre gratuito (Lambda, DynamoDB)
-	•	12 meses gratuitos (EC2, S3, RDS)
-	•	testes (SageMaker)
-	•	Não se aplica por serviço, mas sim, por conta
-
-Simple Monthly Calculator
-Calculadora mensal da AWS
-
-Níveis de suporte AWS
-
-	•	Basic - O plano básico fornece acesso apenas ao seguinte: Atendimento ao cliente e comunidades - acesso 24 horas por dia, 7 dias por semana ao atendimento ao cliente, documentação, white papers e fóruns de suporte.
-	•	AWS Trusted Advisor - acesse as 7 principais verificações e orientações do Trusted Advisor para provisionar seus recursos seguindo as práticas recomendadas para aumentar o desempenho e melhorar a segurança.
-	•	AWS Personal Health Dashboard - Uma visão personalizada da saúde dos serviços da AWS e alertas quando seus recursos são afetados. Este plano não oferece suporte a nenhuma orientação arquitetônica.
-
-	•	Developer - a AWS recomenda o suporte ao desenvolvedor se você estiver testando ou desenvolvendo antecipadamente na AWS e quiser obter suporte técnico por e-mail durante o horário comercial, bem como orientação geral de arquitetura durante a construção e o teste. Você não obtém acesso ao Gerenciamento de eventos de infraestrutura com este plano. Este plano oferece suporte apenas para orientações gerais de arquitetura.
-
-	•	Business - a AWS recomenda o suporte de negócios se você tiver cargas de trabalho de produção na AWS e quiser acesso 24x7 por telefone, e-mail e chat para suporte técnico e orientação arquitetônica no contexto de seus casos de uso específicos. Você obtém acesso total às Verificações de práticas recomendadas do AWS Trusted Advisor. Você também obtém acesso ao Gerenciamento de eventos de infraestrutura por uma taxa adicional.
-
-	•	Enterprise - O AWS Enterprise Support oferece aos clientes serviços semelhantes aos de concierge, em que o foco principal é ajudar o cliente a alcançar seus resultados e ter sucesso na nuvem. Com o Enterprise Support, você obtém suporte técnico 24 horas por dia, 7 dias por semana, de engenheiros de alta qualidade, ferramentas e tecnologia para gerenciar automaticamente a integridade do seu ambiente, revisão consultiva e orientação com base em seus aplicativos e um Gerente Técnico de Conta (TAM) designado para coordenar o acesso ao proativo / programas preventivos e especialistas no assunto da AWS. Este plano oferece suporte à orientação arquitetônica contextual à sua aplicação.
-
-
-
-TCO - Total Cost of Ownership
-
-Custo de migração para a nuvem
-
-
-AWS Cost and Usage Reports
-Quanto tempo o recurso ficou no ar e a quantia cobrada ao longo do tempo
-
-Who has control of the data security in an AWS account?
-AWS Account Owner (Segurança dos dados é ligada ao customer)
-
-Decoupling
-Desacoplar, melhor prática
-
-AWS Cost Explorer
-Previsão de gastos
-
-AWS Organizations
-Gestão de contas. Consolidação de contas e faturamento
-
-Consolidating billing
-Faz agrupamento do faturamento das contas
 
 MFA
 Camada a mais de autenticação
@@ -638,8 +682,6 @@ O AWS Global Accelerator é um serviço de rede que envia o tráfego do seu usu�
 A cyber forensics team has detected that AWS owned IP-addresses are being used to carry out malicious attacks. As this constitutes prohibited use of AWS services, which of the following is the correct solution to address this issue?
 AWS Abuse Team
 
-AWS Budgets
-O AWS Budgets oferece a capacidade de definir orçamentos personalizados que alertam você quando seus custos ou uso excedem (ou estão previstos para exceder) o valor orçado.
 
 Instance Store
 Um armazenamento de instância fornece armazenamento temporário em nível de bloco para sua instância. Esse armazenamento está localizado em discos fisicamente conectados ao computador host. Essa é uma boa opção quando você precisa de armazenamento com latência muito baixa, mas não precisa que os dados persistam quando a instância é encerrada ou pode aproveitar as arquiteturas tolerantes a falhas.
