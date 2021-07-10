@@ -6,7 +6,8 @@
 	3. [Supporting Aws Infrastrtucture](#SupAwsInfra)
 	4. [Cenários](#cenarios01)
 3. [Aws Core Services](#CoreServices)
-	1. [Cenários](#cenarios02)
+	1. [Compute Services on Aws](#CompServices)
+	2. [Cenários](#cenarios02)
 
 ## Introduction <a name="introduction"></a>
 Habilidades validadas pela certificação
@@ -232,8 +233,54 @@ Console: Dashboard que interage com +150 serviços da Aws
 CLI - Command line para administrar via API, ótimo para tarefas automatizadas.
 SDK - Java, .NET, Python, Go, C++
 ```
+### Computer Services on Aws <a name="CompServices"></a>
+Compute services -> 4 principais serviços
 
-### Cenários <a name="cenarios02"> </a>
+EC2 (Máquina virtual):
+```
+Casos de uso: Web application hosting, batch processing(processamento de dados), servidor API, Desktop in the cloud;
+
+Conceitos:
+	- Intance Types não podem ser alteradas em um downtime, algumas possuem capacidades únicas.
+
+	- Instance Store: Efemera
+	Um armazenamento de instância fornece armazenamento temporário em nível de bloco para sua instância. Esse armazenamento está localizado em discos fisicamente conectados ao computador host. Essa é uma boa opção quando você precisa de armazenamento com latência muito baixa, mas não precisa que os dados persistam quando a instância é encerrada ou pode aproveitar as arquiteturas tolerantes a falhas.
+
+	- EBS (Block Storage) - Disco de instâncias. Permite snapshots, é persistente.
+
+	- AMI - Amazon Machine Image: Templates para EC2 com configurações e S.O. prontos para utilização, podendo ser personalizados.
+
+	- Modalidades de precificação:
+	    On demand - Pay-as-you-go, preços por hora
+	    Reservada - 1 ou 3 anos, desconto de até 75%, pagamento à vista, ou parte à vista parte mensal, somente mensal. Podem ser Standart(maior desconto), Convertible ou Schedule.
+	    Spot - Leilão, cliente define um preço a pagar pela capacidade ociosa da AWS, se preço é aceito instância é provisionada, tempo de utilização limitada
+	    Dedicado (Servidor fisico e dedicado)- Preço por hora, descontos chegam a 70%, mas é a opção mais cara
+
+	* Se quiser que a instancia esteja sempre disponível: Stardart ou Convertible Reserved;
+	* Se possui serviços que não são afetados por uma possível interrupção da EC2 ==> Spot Instances
+	* Se possuir serviços com compliances específicas => Dedicated Host
+	* Cargas previsíveis e agendadas => Schedule Reserved Instance
+
+Criação de instancias EC2:
+	•	Qtde e tipo de CPU
+	•	Qtde de memória RAM
+	•	Tam e tipo de disco EBS (Encryption on Rest e Snapshots )
+	SSD - Uso geral (Gp2)
+	SSD Prov IOPS - Permite definir IOPS DB (io1)
+	Throughput Optimized HDD - Disco magnetico alta taxa de transferência BigData (st1)
+	Cold HDD - Arquivo (sc1)
+```
+
+Elastic Beanstalk (Deploy de aplicações na web - PaaS):
+```
+Plataforma como Serviço, processo de provisionamento, gerenciamento, deploy é automatizado.
+Casos de uso: deploy de aplicações com pouco conhecimento de como fazer e com poucas personalizações necessárias.
+```
+Lambda (Serverless - F(function)aaS) - execução de códigos sem provisionamento de infra, pay-as-you-go
+ECS (Gestão de containers - Suporte a Docker)
+
+
+### Cenários <a name="cenarios02"></a>
 1 - Roger possui uma aplicação em React que precisa que ada usuário cadastrado  seja salvo n Aws Cognito de modo personalizado. Qual o melhor método de utilização?
 ==> Aws SDK
 
@@ -242,13 +289,20 @@ SDK - Java, .NET, Python, Go, C++
 
 3 - Jenn possui um startup, onde precisa automatizar alguns processos para gerar reports. Qual o método de utilização?
 ==>Aws CLI
+
+4 - Syl esta em processo de mover suas aplicações para Aws, com previsão de 5 anos. Qual a melhor opção de EC2?
+==> Todas do tipo Reservado
+
+5 - Ed não possui muita experiencia com Aws, mas quer publicar sua app em PHP. Qual a melhor opção para  ele?
+==> Elastic Beanstalk
+
+6 - Cindy esta migrando para a Cloud com seus processos de ingestão de dados, onde nao há problemas caso ocorra interrompimento da instancia. qual o melhor tipo de instancia?
+==> Spot instances, por conta do processo de poder parar sem causar problemas .
 # 3. O que cai na prova
-Computação
+
 Armazenamento
 Redes e entrega de conteúdo
 Banco de dados
-
-Formas de acesso
 
 
 AWS Well-Architected Framework
@@ -298,28 +352,6 @@ Suporte AWS x Trusted Advisor = Analise é limitada 
 
 AWS Core Services
 
-Compute services -> 4 principais serviços
-
-EC2 (Máquina virtual)
-Para criação:
-	•	Qtde e tipo de CPU
-	•	Qtde de memória RAM
-	•	Tam e tipo de disco EBS (Encryption on Rest e Snapshots )
-SSD - Uso geral (Gp2)
-SSD Prov IOPS - Permite definir IOPS DB (io1)
-Throughput Optimized HDD - Disco magnetico alta taxa de transferência BigData (st1)
-Cold HDD - Arquivo (sc1)
-
-	•	Modalidade de precificação
-             On demand - Pay-as-you-go, preços por hora
-    Reservada - 1 ou 3 anos, desconto de até 75%, pagamento à vista ou parte à vista parte mensal
-    Spot - Leilão, cliente define um preço a pagar pela capacidade ociosa da AWS, se preço é aceito instância é provisionada, tempo de utilização limitada
-    Dedicado (Servidor fisico e dedicado)- Preço por hora, descontos chegam a 70%
-
-ECS (Gestão de containers - Suporte a Docker)
-Lambda (Serverless - F(function)aaS)
-Elastic Beanstalk (Deploy de aplicações na web - PaaS)
-
 
 Security Group
 Firewall propriamente dito
@@ -344,7 +376,7 @@ Ciclo de vida (Lifecycle)
 Glacier (Object Storage) - Archiving. Acesso não imediato. Ideal para objetos que você não usa
 mais, objetos arquivados, backups e etc
 
-EBS (Block Storage) - Disco de instâncias. Permite snapshots
+
 
 EFS (Armazenamento de arquivos) - Pode ser compartilhado entre instâncias e pode ser conectado ao DC local via direct connect
 
@@ -709,8 +741,7 @@ A cyber forensics team has detected that AWS owned IP-addresses are being used t
 AWS Abuse Team
 
 
-Instance Store
-Um armazenamento de instância fornece armazenamento temporário em nível de bloco para sua instância. Esse armazenamento está localizado em discos fisicamente conectados ao computador host. Essa é uma boa opção quando você precisa de armazenamento com latência muito baixa, mas não precisa que os dados persistam quando a instância é encerrada ou pode aproveitar as arquiteturas tolerantes a falhas.
+
 
 Which of the following AWS services support VPC Endpoint Gateway for a private connection from a VPC? (Select two)
 VPC Endpoint permite que você conecte de forma privada seu VPC a serviços AWS suportados e serviços de ponto de extremidade VPC fornecidos por AWS PrivateLink. Apenas S3 e DynamoDB são compatíveis com VPC Endpoint Gateway.
