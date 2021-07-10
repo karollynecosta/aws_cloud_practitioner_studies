@@ -5,7 +5,8 @@
 	2. [Cloud Economics](#CloudEconomics)
 	3. [Supporting Aws Infrastrtucture](#SupAwsInfra)
 	4. [Cenários](#cenarios01)
-3. [Another paragraph](#paragraph2)
+3. [Aws Core Services](#CoreServices)
+	1. [Cenários](#cenarios02)
 
 ## Introduction <a name="introduction"></a>
 Habilidades validadas pela certificação
@@ -224,25 +225,29 @@ Planos de suporte AWS
 11 - x possui uma conta pessoal, nao precisa de suporte, mas quer acessar o Trusted Advisor. Qual o plano adequado?
 ==> Basic Support
 
-# 2. O que cai na prova
+## Aws Core Services <a name="CoreServices"></a>
+Modos de interação com a Aws:
+```
+Console: Dashboard que interage com +150 serviços da Aws
+CLI - Command line para administrar via API, ótimo para tarefas automatizadas.
+SDK - Java, .NET, Python, Go, C++
+```
 
+### Cenários <a name="cenarios02"> </a>
+1 - Roger possui uma aplicação em React que precisa que ada usuário cadastrado  seja salvo n Aws Cognito de modo personalizado. Qual o melhor método de utilização?
+==> Aws SDK
 
+2 - Elisa esta considerando a migração para a Aws, mas querem testar um BD Relacional antes de começar. Qual o melhor modo de interação?
+==> Aws Console
 
-
-
-Core Services
-
+3 - Jenn possui um startup, onde precisa automatizar alguns processos para gerar reports. Qual o método de utilização?
+==>Aws CLI
+# 3. O que cai na prova
 Computação
 Armazenamento
 Redes e entrega de conteúdo
 Banco de dados
 
-Acesso
-Console
-CLI
-SDK
-
-# 3. O que cai na prova
 Formas de acesso
 
 
