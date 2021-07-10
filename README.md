@@ -8,7 +8,8 @@
 3. [Aws Core Services](#CoreServices)
 	1. [Compute Services on Aws](#CompServices)
 	2. [Content and Network Delivery Services](#ContentNetworkDeliveryServices)
-	3. [Cenários](#cenarios02)
+	3. [File Storage Service](#FileStorageServ)
+	4. [Cenários](#cenarios02)
 
 ## Introduction <a name="introduction"></a>
 Habilidades validadas pela certificação
@@ -266,10 +267,6 @@ Criação de instancias EC2:
 	•	Qtde e tipo de CPU
 	•	Qtde de memória RAM
 	•	Tam e tipo de disco EBS (Encryption on Rest e Snapshots )
-	SSD - Uso geral (Gp2)
-	SSD Prov IOPS - Permite definir IOPS DB (io1)
-	Throughput Optimized HDD - Disco magnetico alta taxa de transferência BigData (st1)
-	Cold HDD - Arquivo (sc1)
 ```
 
 Elastic Beanstalk (Deploy de aplicações na web - PaaS):
@@ -285,7 +282,7 @@ Programação orientada a eventos (Trigger)
 ```
 ECS (Gestão de containers - Suporte a Docker)
 
-### Serviços de distribuição de conteúdos <a name="ContentNetworkDeliveryServices"></a>
+### Serviços de distribuição de conteúdos - CDN <a name="ContentNetworkDeliveryServices"></a>
 
 AWS Route53:
 ```
@@ -318,8 +315,6 @@ Aws Direct Connect:
 ```
 	Facilita a conexão entre um DC local diretamente para a Aws, sem exposição do tráfico.
 ```
-
-EFS (Armazenamento de arquivos) - Pode ser compartilhado entre instâncias e pode ser conectado ao DC local via direct connect
 
 Elasticity:
 ```
@@ -359,6 +354,100 @@ O AWS Global Accelerator é um serviço de rede que envia o tráfego do seu usu�
 Não confia em resolução de DNS, pois é bseado em IP para acesso.
 Casos de Uso: Serviços que não usam HTTP = UDP, Voip. IP Estático. Melhores táticas de failover.
 ```
+
+### File Storage Services <a name="FileStorageServ"></a>
+Serviços gerais de armazenamento na Aws
+
+Elastic Block Storage (EBS):
+```
+Operações podem ser feitas em apenas alguns blocos do objeto (partes)
+Redundancias dentro de uma zona de disponibilidade
+Possibilidade de snapshots
+Multipos tipos  de volumes:
+	SSD - Uso geral (Gp2)
+	SSD Prov IOPS - Permite definir IOPS DB (io1)
+	Throughput Optimized HDD - Disco magnetico alta taxa de transferência BigData (st1)
+	Cold HDD - Arquivo (sc1)
+```
+
+EFS (Armazenamento de arquivos):
+```
+Sistema NFS de arquivos
+Pode ser compartilhado entre instâncias e pode ser conectado ao DC local via direct connect
+Suporta pentabytes entre multimas AZ
+2 tipos de volume:
+	Stardart
+	Infrequent Access
+Possibilidade de conf de lyfecycle
+Compartilhamento de arquivos entre várias EC2 LINUX ao mesmo tempo
+Possui a opção para Windows Systems
+```
+
+Amazon S3:
+Classes de armazenamento (storage class):
+```
+Standard: classe padrão, para objetos acessados frequentemente.
+Intelligent-Tiering: automaticamente mover dados entre classes de armazenamento de  acordo com o acesso, mesma performance que a Standart, mas podendo ser mais economica.
+Standart Infrequent access: dados que não são acessados com frequencia.
+One Zone IA: dados não acessados frequentemente, mas hospedado em apenas uma zona de disponibilidade.
+```
+
+Ciclo de vida (Lifecycle Policie):
+```
+Mover/Deletar objetos de acordo com o tempo
+```
+
+S3 Transfer Acceleration:
+```
+Transf. de grandes quantidades de dados em uma distância (region) muito longa (Alocado em Edge Location (Cloudfront)) de forma mais ágil.
+```
+
+Hospedando um site estático em um S3 Bucket:
+```
+ Acesso imediato. Nome único. Ideal para conteúdo estático
+	•	Acesso via Console, CLI e SDK
+	•	Cada objeto até 5TB de tamanho
+	•	Objetos no S3 são armazenados em Buckets. Nomes dos objetos são Object Key, versões são Version ID e endereço são Link Address
+	•	Definições para objetos e buckets	
+		Politica de acesso (policy)
+		Versionamento
+		Criptografia
+	•	Cross-Region Replication - Objetos de um bucket de uma região para outra. 
+```
+
+Glacier (Object Storage):
+```
+ Archiving. Acesso não imediato. Ideal para objetos que você não usa mais, objetos arquivados, backups e arquivos retidos por quetões legais.
+ Possibilidade de configuração de quando esses dados podem ser acessados, 90 dias  mínimo.
+ Pode ser recuperado em horas.
+```
+
+S3 Glacier Deep Archive:
+```
+é a classe de armazenamento de menor custo do Amazon S3 e oferece suporte para retenção de longo prazo e preservação digital para dados que podem ser acessados uma ou duas vezes por ano.
+```
+
+Storage Gateway (Armazenamento híbrido) -  Permite conectar arquivos, volumes e backups entre AWS e storage local
+
+Snowball
+```
+(Transf. de dados para a AWS)
+Dispositivo físico. Suporta Petabytes.
+Amazon enviaum dispositivo, coleta e envia para a cloud
+```
+
+Snowmobile
+```
+(Transf. de dados para a AWS)
+Suporta 100 PB
+Caminhão + Container entregue.
+Aws configura, recolhe e envia para a cloud
+Casos extremos 
+```
+
+Snowball Edge (Dispositivo para processamento de serviços como EC2 e Lambda) - Suporta 100 TB. Permite utilização em locais sem acesso a cloud e posterior sincronização (Navios, fábricas, desertos)
+
+
 ### Cenários <a name="cenarios02"></a>
 1 - Roger possui uma aplicação em React que precisa que ada usuário cadastrado  seja salvo n Aws Cognito de modo personalizado. Qual o melhor método de utilização?
 ==> Aws SDK
@@ -386,6 +475,15 @@ Casos de Uso: Serviços que não usam HTTP = UDP, Voip. IP Estático. Melhores t
 
 9 -  Ell possui uma app rodando em EC2, mas está passando problemas de downtime com demandas inesperadas. Qual a melhor forma de escalar sua EC2 e combater esse problema?
 ==>Horizontal Scaling usando ELB
+
+10 - Ely tem um site estático utilizando um S3,mas possui dados de ativos que são raramente acessados. Como ela pode reduzir os custos?
+==> S3 lifecycles rules, onde podem ser criadas regras para mudar o tipo de classe armanezamento de acordo com o tempo publicado, com S3 Standart IA storage class.
+
+11- Est esta migrando para a Cloud e possui 2PB de arquivos para migrar e está procurando um modo mais ágil para isto. Qual a melhor tática?
+==> Aws Snowball
+
+12 - Emi procura um sistema de compartilhamento de arquivos entre 8 diferentes instanes Ec2 Linux, beirando 1PB. Qual a melhor ferramenta?
+==> EFS
 # 3. O que cai na prova
 
 Armazenamento
@@ -443,38 +541,6 @@ AWS Core Services
 
 Security Group
 Firewall propriamente dito
-
-Serviços de Armazenamento AWS
-Object Storage (S3) - Operações no objeto como um todo
-Block Storage (EBS) - Operações podem ser feitas em apenas alguns blocos do objeto (partes)
-
-S3 (Object Storage) - Acesso imediato. Ideal para conteúdo estático
-	•	Acesso via Console, CLI e SDK
-	•	Cada objeto até 5TB de tamanho
-	•	Objetos no S3 são armazenados em Buckets. Nomes dos objetos são Object Key, versões são Version ID e endereço são Link Address
-	•	Definições para objetos e buckets
-Classe de armazenamento (storage class) - Frequência de acesso, Tempo de recuperação, Preço (Standard, Infrequent access, One Zone IA, Glacier, Reduced Redundancy e intelligent- Tiering)
-Politica de acesso (policy)
-Versionamento
-Criptografia
-Ciclo de vida (Lifecycle)
-	•	Cross-Region Replication - Objetos de um bucket de uma região para outra. Transfer Acceleration - Transf. de grandes quantidades de dados em uma distância (region) muito longa (Alocado em Edge Location (Cloudfront)).
-
-
-Glacier (Object Storage) - Archiving. Acesso não imediato. Ideal para objetos que você não usa
-mais, objetos arquivados, backups e etc
-
-
-
-
-
-Storage Gateway (Armazenamento híbrido) -  Permite conectar arquivos, volumes e backups entre AWS e storage local
-
-Snowball (Transf. de dados para a AWS) - Dispositivo físico. Suporta Petabytes. Amazon envia, coleta e rastreia
-
-Snowball Edge (Dispositivo para processamento de serviços como EC2 e Lambda) - Suporta 100 TB. Permite utilização em locais sem acesso a cloud e posterior sincronização (Navios, fábricas, desertos)
-
-Snowmobile (Transf. de dados para a AWS) - Caminhão + Container. Suporta 100 PB
 
 
 
