@@ -7,7 +7,8 @@
 	4. [Cenários](#cenarios01)
 3. [Aws Core Services](#CoreServices)
 	1. [Compute Services on Aws](#CompServices)
-	2. [Cenários](#cenarios02)
+	2. [Content and Network Delivery Services](#ContentNetworkDeliveryServices)
+	3. [Cenários](#cenarios02)
 
 ## Introduction <a name="introduction"></a>
 Habilidades validadas pela certificação
@@ -276,10 +277,88 @@ Elastic Beanstalk (Deploy de aplicações na web - PaaS):
 Plataforma como Serviço, processo de provisionamento, gerenciamento, deploy é automatizado.
 Casos de uso: deploy de aplicações com pouco conhecimento de como fazer e com poucas personalizações necessárias.
 ```
-Lambda (Serverless - F(function)aaS) - execução de códigos sem provisionamento de infra, pay-as-you-go
+Lambda (Serverless - F(function)aaS):
+``` 
+execução de códigos sem provisionamento de infra,
+pay-as-you-go,
+Programação orientada a eventos (Trigger)
+```
 ECS (Gestão de containers - Suporte a Docker)
 
+### Serviços de distribuição de conteúdos <a name="ContentNetworkDeliveryServices"></a>
 
+AWS Route53:
+```
+Serviço de DNS.
+Registro de domíniio, roteamento de DNS e verificação de integridade (verifica periodicamente se um recurso esta acessível, disponível e funcional)
+Global service Altamente disponível
+Possibilidade de configuração de failover, onde caso uma região de deploy caia, ele direciona para outra em correto funcionamento
+```
+
+VPC:
+```
+É a sua rede particular, isolada e privada dentro da AWS.
+Suporta IPv4 e IPv6, podendo ser pública ou privada, ou somente privada para quem tiver acesso a VPC
+É possível configurar: Range de IP, Subnets, Route tables, network gateways
+
+Tipos:
+	•	Padrão - Para cada conta AWS é criada uma rede padrão (VPC) com configs básicas pela própria AWS onde novas funcionalidades podem ser adicionadas
+	•	Não Padrão - O cliente cria de acordo com a sua necessidade para cada region
+
+Subredes (subnets):
+	A VPC cobre toda uma região e a subnet é uma ou mais subredes criadas em cada AZ
+		•	Route Tables - Controla o tráfego que sai das subnets
+		•	Internet Gateway - Permite que a VPC tenha acesso a internet
+		•	NAT Gateway - Permite que subnets tenham acesso a internet
+		•	Network Acess Control List (NACL) - Controla acesso a subnets
+		•	Security Groups - O firewall
+```
+
+Aws Direct Connect:
+```
+	Facilita a conexão entre um DC local diretamente para a Aws, sem exposição do tráfico.
+```
+
+EFS (Armazenamento de arquivos) - Pode ser compartilhado entre instâncias e pode ser conectado ao DC local via direct connect
+
+Elasticity:
+```
+Refere-se à capacidade de adquirir recursos conforme você precisa e liberar quando eles não são mais necessários é denominada como elasticidade da nuvem.
+```
+
+AWS Elastic Load Balancing:
+```
+ELB. É o serviço de balanceamento de carga da AWS
+	•	Classic Load Balancing
+	•	Network Load Balancing - Grandes cargas podendo atuar na camada 4 (TCP/UDP)
+	•	Application Load Balancing - Funciona na camada 7 (HTTP/S) podendo distribuir baseado no conteúdo (URL por exemplo)
+Integrado com Ec2, Ec e Lambda
+
+Auto Scaling: Capacidade de crescer o ambiente
+	•	Critérios: Grupos EC2 (configs) e Critério para escalar (CPU e Tráfego In/Out)
+	Vertical Scaling ==> Scale In: alocar masi recursos as instancias.
+	Horizontal Scaling == Scale out: adição de instancias para lidar com o tráfego da app
+```
+
+CloudFront:
+```
+É o CDN e trabalha com Edge Locations (parceiros onde não existirem Regions). 
+Acelera a entrega de conteúdo
+Inclui camadas de segurança(WAF, Shield for DDoS)
+```
+
+API Gateway:
+```
+É um serviço gerenciado que permite que desenvolvedores criem, publiquem, mantenham, monitorem e protejam APIs em qualquer escala com facilidade.
+Integrado com diversos serviços, provendo monitoramento e metricas
+```
+
+AWS Global Accelerator:
+```
+O AWS Global Accelerator é um serviço de rede que envia o tráfego do seu usuário por meio da infraestrutura de rede global do Amazon Web Service(Edge), melhorando o desempenho do usuário da Internet em até 60%.
+Não confia em resolução de DNS, pois é bseado em IP para acesso.
+Casos de Uso: Serviços que não usam HTTP = UDP, Voip. IP Estático. Melhores táticas de failover.
+```
 ### Cenários <a name="cenarios02"></a>
 1 - Roger possui uma aplicação em React que precisa que ada usuário cadastrado  seja salvo n Aws Cognito de modo personalizado. Qual o melhor método de utilização?
 ==> Aws SDK
@@ -298,6 +377,15 @@ ECS (Gestão de containers - Suporte a Docker)
 
 6 - Cindy esta migrando para a Cloud com seus processos de ingestão de dados, onde nao há problemas caso ocorra interrompimento da instancia. qual o melhor tipo de instancia?
 ==> Spot instances, por conta do processo de poder parar sem causar problemas .
+
+7 - Jane possui 2 DC locais e quer fazer a migração para a Aws,mas quer que o tráfego seja de forma privada e segura. Qual o melhor serviço para utilizar?
+==> Aws Direct Connect.
+
+8 - Tim possui um site global e quer otimizar a performance para seus usuários com um CDN(ContentDeliveryNetwork). Qual serviço o ajudará?
+==> Aws Cloudfront
+
+9 -  Ell possui uma app rodando em EC2, mas está passando problemas de downtime com demandas inesperadas. Qual a melhor forma de escalar sua EC2 e combater esse problema?
+==>Horizontal Scaling usando ELB
 # 3. O que cai na prova
 
 Armazenamento
@@ -378,7 +466,7 @@ mais, objetos arquivados, backups e etc
 
 
 
-EFS (Armazenamento de arquivos) - Pode ser compartilhado entre instâncias e pode ser conectado ao DC local via direct connect
+
 
 Storage Gateway (Armazenamento híbrido) -  Permite conectar arquivos, volumes e backups entre AWS e storage local
 
@@ -389,20 +477,6 @@ Snowball Edge (Dispositivo para processamento de serviços como EC2 e Lambda) - 
 Snowmobile (Transf. de dados para a AWS) - Caminhão + Container. Suporta 100 PB
 
 
-VPC
-É a sua rede particular, isolada e privada dentro da AWS
-
-Tipos:
-	•	Padrão - Para cada conta AWS é criada uma rede padrão (VPC) com configs básicas pela própria AWS onde novas funcionalidades podem ser adicionadas
-	•	Não Padrão - O cliente cria de acordo com a sua necessidade para cada region
-
-Subredes (subnets)
-A VPC cobre toda uma região e a subnet é uma ou mais subredes criadas em cada AZ
-	•	Route Tables - Controla o tráfego que sai das subnets
-	•	Internet Gateway - Permite que a VPC tenha acesso a internet
-	•	NAT Gateway - Permite que subnets tenham acesso a internet
-	•	Network Acess Control List (NACL) - Controla acesso a subnets
-	•	Security Groups - O firewall
 
 
 
@@ -426,9 +500,6 @@ RDS - 100% gerenciado. Escolha de tipo de instância. Escalável. Backup Aplica�
 
 RedShift (Colunar)- 100% gerenciado. Escalável. Dataware House, Big data e data lake (volume alto de dados)
 
-Lambda
-Functions as a service - FaaS
-Programação orientada a eventos (Trigger)
 
 AWS CloudTrail
 Registra QUEM fez O QUE em QUAL RECURSO e QUANDO
@@ -443,18 +514,7 @@ Serviço de monitoração que monitora meus recursos na AWS
 
 CloudTrail x CloudWatch = Acesso a recursos x Monitoração dos recursos
 
-CloudFront
-É o CDN e trabalha com Edge Locations (parceiros onde não existirem Regions). Acelera a entrega de conteúdo
 
-AWS Elastic Load Balancing / Auto Scaling
-ELB. É o serviço de balanceamento de carga da AWS
-	•	Classic Load Balancing
-	•	Network Load Balancing - Grandes cargas podendo atuar na camada 4 (TCP/UDP)
-	•	Application Load Balancing - Funciona na camada 7 (HTTP/S) podendo distribuir baseado no conteúdo (URL por exemplo)
-
-Auto Scaling
-Capacidade de crescer o ambiente
-	•	Critérios: Grupos EC2 (configs) e Critério para escalar (CPU e Tráfego In/Out)
 
 AWS DevTools
 Ferramentas de desenvolvimento
@@ -493,8 +553,6 @@ Serviço de filas de mensagens (mensageria). Divide-se em Produtor e consumidor
 AWS SES
 Envio e recebimento de emails em alta escala (email MKT, email transacional, notificações e recebimento) e custo efetivo
 
-AWS Route53
-Serviço de DNS. Registro de domíniio, roteamento de DNS e verificação de integridade (verifica periodicamente se um recurso esta acessível, disponível e funcional)
 
 AWS CloudFormation
 Descreve e modela toda a sua infraestrutura na AWS utilizando um arquivo de texto ou linguagem de programação
@@ -734,8 +792,6 @@ Banco de dados de documentos com compatibilidade com o MongoDB
 AWS Shield Advanced provides expanded DDoS attack protection for web applications running on which of the following resources?
 Route53, AWS Global Accelerator
 
-AWS Global Accelerator
-O AWS Global Accelerator é um serviço de rede que envia o tráfego do seu usuário por meio da infraestrutura de rede global do Amazon Web Service, melhorando o desempenho do usuário da Internet em até 60%.
 
 A cyber forensics team has detected that AWS owned IP-addresses are being used to carry out malicious attacks. As this constitutes prohibited use of AWS services, which of the following is the correct solution to address this issue?
 AWS Abuse Team
@@ -771,8 +827,7 @@ AWS Config mesma region
 
 Agility
 No mundo da computação em nuvem, "Agilidade" se refere à capacidade de desenvolver, testar e lançar aplicativos de software que impulsionam o crescimento dos negócios. Outra maneira de explicar "Agilidade" - a AWS fornece uma enorme infraestrutura em nuvem global que permite inovar rapidamente, experimentar e iterar. Em vez de esperar semanas ou meses pelo hardware, você pode implantar novos aplicativos instantaneamente. Essa habilidade é chamada de Agilidade.
-Elasticity
-Refere-se à capacidade de adquirir recursos conforme você precisa e liberar quando eles não são mais necessários é denominada como elasticidade da nuvem.
+
 Reliability
 Refere-se à capacidade de um sistema de se recuperar de interrupções de infraestrutura ou serviço, adquirindo dinamicamente recursos de computação para atender à demanda e mitigar interrupções.
 Scalability
