@@ -7,9 +7,10 @@
 	4. [Cenários](#cenarios01)
 3. [Aws Core Services](#CoreServices)
 	1. [Compute Services on Aws](#CompServices)
-	2. [Content and Network Delivery Services](#ContentNetworkDeliveryServices)
-	3. [File Storage Service](#FileStorageServ)
-	4. [Cenários](#cenarios02)
+	2. [IAM](#IAM)
+	3. [Content and Network Delivery Services](#ContentNetworkDeliveryServices)
+	4. [File Storage Service](#FileStorageServ)
+	5. [Cenários](#cenarios02)
 
 ## Introduction <a name="introduction"></a>
 Habilidades validadas pela certificação
@@ -60,7 +61,7 @@ Vantagens:
 Tipo de Cloud:
 ```
 	•	IaaS - Infrastructure as a Service, Físico/Virtuais (Hospedagem), Maximo controle sobre o funcionamento dos serviço(manutenção e etc).
-	•	Paas - DC responsável por tudo até a camada de software, Ex.: Wordpress. 
+	•	Paas - DC responsável por tudo até a camada de software, Ex.: Wordpress. Gerencia apenas dos dados. 
 	•	SaaS - Software as a Service, Utilização do serviço apenas (Office 365), mínimo controle.
 ```
 
@@ -89,10 +90,15 @@ Funcionamento da infraestrutrura de Cloud Computing
 
 Regions and Availability:
 ```
-	•	Regions - Onde a AWS esta fisicamente. Os DCs propriamente ditos
+	Regions - Onde a AWS esta fisicamente. Os DCs propriamente ditos
 	- Atualmente em +- 22 regiões
-	- Availabilitys zones: 1+ DC por regiões da Aws, +60 zones, entregando disponibilidade com menos propensão a falhas.
+	- Availabilitys zones: 1+ DC por regiões da Aws, +60 zones, entregando disponibilidade com menos propensão a falhas. Uso para deployar infra.
 	- Region Identifier: us-east-2a(area-subarea-NumeroAvailabilityZone)
+	4 Pontos a serem considerados ao escolher:
+		1 - Compliance with data governance
+		2 - Proximity to customers
+		3 - availableservices
+		4 - features within a Region
 ```
 
 Edge Locations - CDN:
@@ -228,13 +234,89 @@ Planos de suporte AWS
 11 - x possui uma conta pessoal, nao precisa de suporte, mas quer acessar o Trusted Advisor. Qual o plano adequado?
 ==> Basic Support
 
+12 - O que não deve ser considerado quando se escolhe uma região na Aws?
+==> Capacity, pois é ilimitada.
+
 ## Aws Core Services <a name="CoreServices"></a>
 Modos de interação com a Aws:
 ```
 Console: Dashboard que interage com +150 serviços da Aws
 CLI - Command line para administrar via API, ótimo para tarefas automatizadas.
 SDK - Java, .NET, Python, Go, C++
+CloudShell - CommandLine acessível via Console
 ```
+### IAM -  Identity and Access Management <a name=IAM></a>
+Serviço Global que controla acesso a recursos na AWS
+
+Permite criar e controlar usuários, autenticação ou limitar acesso de usuários a recursos
+IAM CONTROLA QUEM PODE FAZER O QUE NA SUA CONTA AWS
+
+4 Grandes elementos:
+	•	Users - pessoa ou serviço
+	•	Groups - grupo de usuários
+	•	Roles (Funções) - Recursos acessando recursos. Usam policies.
+	•	Policies - Managed que são criadas pela AWS e Inline que são criadas pelo cliente (quem tem acesso ao que e o que podem fazer) em JSON
+
+Princípio do privilégio mínimo(least privilege principle): não se dá mais permissões do que o usuário precisa.
+
+Iam Policies:
+```
+Estrutura JSON que define permissões de Usuario/grupo/role:
+ "Version": "2012-10-17",  --> Versão da linguagem, req
+ "Id": "s3-teste" --> identificador da política, opcional 
+ "Statement": [-->regras da política, pode ser +1
+        {
+			"Sid": "1"--> organizador da politica, opcional 
+            "Effect": "Allow", --> Obrigatorio, Allow / Deny
+            "Principal": {
+				"AWS": ["arn:aws:iam::12345678:root"] --> Conta/user/role que a política será APLICADA
+			},
+            "Action": [ --> Lista das aços que está sendo permitido/bloqueado
+                "s3:List*",
+                "s3:Get*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::testett", --> Recurso onde a policie terá EFEITO
+            ],
+            "Condition": { --> Condicional para quando essa policie estivar ativa, OPCIONAL
+                "StringEquals": {
+                    "aws:sourceVpc": []
+                }
+            }
+        } 
+``` 
+
+Iam Roles:
+```
+Feito para serviços da Aws que precisam de específicas permissões
+Casos comuns: EC2 Intances, Lambdas, CloudFormation
+```
+
+Iam Security Tools:
+```
+Credentials Report: Todos os dados IAM da conta
+Access Advisor: Mostra quando os recursos disponíveis daquele user foram acessados por ele.
+```
+
+Melhores Práticas:
+```
+Não usar a conta root para serviços diarios
+Um usuário  físico = 1 aws user
+Criar um política de senhas fortes
+Reforçar o uso de MFA
+Crie Roles para permissões de serviços que rodam na Aws
+AccessKey para accessos programados (CLI/SDK)
+Faça audiorias de segurança com Credentials Report
+Nunca compartilhar accesskeys
+```
+
+Modelo de Responsabilidade Compartilhada:
+```
+Security and Compliance são responsabilidades compartilhadas entre a AWS e o cliente.
+aws: compliance validation, infraestrutura global..
+User: Rotação de keys, aplicação da arquitetura recomendada..
+```
+
 ### Computer Services on Aws <a name="CompServices"></a>
 Compute services -> 4 principais serviços
 
@@ -267,6 +349,10 @@ Criação de instancias EC2:
 	•	Qtde e tipo de CPU
 	•	Qtde de memória RAM
 	•	Tam e tipo de disco EBS (Encryption on Rest e Snapshots )
+
+Modelo de Segurança Compartilhada:
+	Aws: Compliance, isolação de hosts, infraestrutura
+	User: Configuração de SG,aplicação de patches, Softwares que estao na instancia
 ```
 
 Elastic Beanstalk (Deploy de aplicações na web - PaaS):
@@ -519,7 +605,6 @@ Cost Optimization - Evitar gastos desnecessários
 	•	Principais serviços: Tag Resources, AWS Cost Explorer, Autoscaling
 
 
-
 AWS_Well-Architected_Framewor...746.1 KB
 
 AWS Trusted Advisor
@@ -536,15 +621,8 @@ Service Limits
 Qual é a ferramenta que pode ser utilizada para obter recomendações de performance, segurança e otimização de custos
 Suporte AWS x Trusted Advisor = Analise é limitada 
 
-AWS Core Services
-
-
 Security Group
 Firewall propriamente dito
-
-
-
-
 
 
 AWS Integrated Services
@@ -629,7 +707,7 @@ Security
 
 Segurança na AWS
 
-	•	AWS IAM - Gestão de usuários e acessos
+	•	AWS IAM - Gestão de usuários e acessos - Serviço Global
 	•	AWS KMS - Gestão de certificados
 	•	AWS Shield - Proteção de DDoS
 	•	AWS WAF - Firewall para aplicações web
@@ -650,25 +728,6 @@ Produtos que não são SEC mas que trabalham integrados
 
 Modelo de segurança compartilhada
 
-
-
-
-
-
-IAM - Identity and Access Management
-
-Serviço que controla acesso a recursos na AWS
-
-Permite criar e controlar usuários, autenticação ou limitar acesso de usuários a recursos
-
-IAM CONTROLA QUEM PODE FAZER O QUE NA SUA CONTA AWS
-
-4 Grandes elementos
-
-	•	Users - pessoa ou serviço
-	•	Groups - grupo de usuários
-	•	Roles (Funções) - Recursos acessando recursos. Usam policies.
-	•	Policies - Managed que são criadas pela AWS e Inline que são criadas pelo cliente (quem tem acesso ao que e o que podem fazer)
 
 Amazon Inspector
 Analise automática de segurança em aplicações em instâncias EC2
@@ -901,6 +960,4 @@ A escalabilidade é a medida da capacidade de um sistema de crescer para acomoda
 
 AWS Artifact
 O AWS Artifact é sua primeira opção de recurso para informações relacionadas à conformidade que importam para você. Ele oferece acesso sob demanda aos relatórios de segurança e conformidade da AWS e a acordos online específicos.
-
-Security and Compliance são responsabilidades compartilhadas entre a AWS e o cliente.
 
