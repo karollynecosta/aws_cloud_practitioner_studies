@@ -349,6 +349,7 @@ Criação de instancias EC2:
 	•	Qtde e tipo de CPU
 	•	Qtde de memória RAM
 	•	Tam e tipo de disco EBS (Encryption on Rest e Snapshots )
+	- Security Group para garantir o tráfegoin/out na instancia
 
 Modelo de Segurança Compartilhada:
 	Aws: Compliance, isolação de hosts, infraestrutura
@@ -367,6 +368,52 @@ pay-as-you-go,
 Programação orientada a eventos (Trigger)
 ```
 ECS (Gestão de containers - Suporte a Docker)
+
+
+Elasticity:
+```
+Refere-se à capacidade de adquirir recursos conforme você precisa e liberar quando eles não são mais necessários é denominada como elasticidade da nuvem.
+```
+
+Scalability:
+```
+Habiilidade de acomodar mais recursos de hardware(scale up) à uma instancia ou de adicionar nodes(scale out)
+```
+
+Agility:
+```
+Não está relaciolada a escalabilidade,trata-se da agilidade de possuir novos recursos e disponibilizalos 
+```
+
+Elastic Load Balancing:
+```
+ELB: É o serviço de balanceamento de carga, gereciado pela AWS, com multiplos Ec2 como backend.
+	3 Tipos:
+		•	Classic Load Balancing - Camada 4 e 7, ELB mais antigo, esta sendo desativado aos poucos. Pouco indicado.
+		•	Network Load Balancing - Grandes cargas podendo atuar na camada 4 (TCP/UDP)
+		•	Application Load Balancing - Funciona na camada 7 (HTTP/S) podendo distribuir baseado no conteúdo (URL por exemplo)
+	
+	Aws garante HA, atualizações e manutenções, entre +1 Availability zones
+	Integrado com IP, Ec2 e Lambda
+	faz cehck regulares das instancias
+	custa menos que criar um Load Balancer próprio
+	pode prover SSL terminations(HTTPS) para websites
+	Backend nao escalável
+
+Auto Scaling Groups(ASG): Capacidade de crescer o ambiente
+	•	Critérios: Grupos EC2 (configs) e Critério para escalar (CPU e Tráfego In/Out)
+	Vertical Scaling ==> Scale In: alocar mais recursos as instancias. limite de hardware.
+	Horizontal Scaling == Scale out: adição de instancias para lidar com o tráfego da app
+	Estratégias dinamicas:		
+		Substitui Ec2 instáveis SEM MUDAR SEUS TIPOS
+		Definição de recursos mínimos e maximos para escalação de novos recursos. 
+
+High Availalibity:
+	- Geralmente utilizado com Horizontal Scaling
+	- Rodar a aplicação em +1 AZ, para caso um deste sofrer um desastre, o outro assuma a carga.
+```
+
+Application Load Balancer (ALB)
 
 ### Serviços de distribuição de conteúdos - CDN <a name="ContentNetworkDeliveryServices"></a>
 
@@ -402,25 +449,6 @@ Aws Direct Connect:
 	Facilita a conexão entre um DC local diretamente para a Aws, sem exposição do tráfico.
 ```
 
-Elasticity:
-```
-Refere-se à capacidade de adquirir recursos conforme você precisa e liberar quando eles não são mais necessários é denominada como elasticidade da nuvem.
-```
-
-AWS Elastic Load Balancing:
-```
-ELB. É o serviço de balanceamento de carga da AWS
-	•	Classic Load Balancing
-	•	Network Load Balancing - Grandes cargas podendo atuar na camada 4 (TCP/UDP)
-	•	Application Load Balancing - Funciona na camada 7 (HTTP/S) podendo distribuir baseado no conteúdo (URL por exemplo)
-Integrado com Ec2, Ec e Lambda
-
-Auto Scaling: Capacidade de crescer o ambiente
-	•	Critérios: Grupos EC2 (configs) e Critério para escalar (CPU e Tráfego In/Out)
-	Vertical Scaling ==> Scale In: alocar masi recursos as instancias.
-	Horizontal Scaling == Scale out: adição de instancias para lidar com o tráfego da app
-```
-
 CloudFront:
 ```
 É o CDN e trabalha com Edge Locations (parceiros onde não existirem Regions). 
@@ -447,8 +475,10 @@ Serviços gerais de armazenamento na Aws
 Elastic Block Storage (EBS):
 ```
 Operações podem ser feitas em apenas alguns blocos do objeto (partes)
+É um drive na cloud, pode ser retirado de uma EC2 e alocado em outra. ==> Como se fosse um HD externo
+Utiliza a internet para o seu tráfego, podendo ter latencia
 Redundancias dentro de uma zona de disponibilidade
-Possibilidade de snapshots
+Possibilidade de snapshots e provisionamento
 Multipos tipos  de volumes:
 	SSD - Uso geral (Gp2)
 	SSD Prov IOPS - Permite definir IOPS DB (io1)
@@ -459,36 +489,18 @@ Multipos tipos  de volumes:
 EFS (Armazenamento de arquivos):
 ```
 Sistema NFS de arquivos
-Pode ser compartilhado entre instâncias e pode ser conectado ao DC local via direct connect
+pay-per-use
+Pode ser compartilhado entre ate 100 instâncias e pode ser conectado ao DC local via direct connect
 Suporta pentabytes entre multimas AZ
 2 tipos de volume:
 	Stardart
 	Infrequent Access
 Possibilidade de conf de lyfecycle
-Compartilhamento de arquivos entre várias EC2 LINUX ao mesmo tempo
-Possui a opção para Windows Systems
+Compartilhamento de arquivos entre várias EC2 LINUX ao mesmo tempo, em várias AZ
+Possui a opção para Windows Systems ==> FSx
 ```
 
-Amazon S3:
-Classes de armazenamento (storage class):
-```
-Standard: classe padrão, para objetos acessados frequentemente.
-Intelligent-Tiering: automaticamente mover dados entre classes de armazenamento de  acordo com o acesso, mesma performance que a Standart, mas podendo ser mais economica.
-Standart Infrequent access: dados que não são acessados com frequencia.
-One Zone IA: dados não acessados frequentemente, mas hospedado em apenas uma zona de disponibilidade.
-```
-
-Ciclo de vida (Lifecycle Policie):
-```
-Mover/Deletar objetos de acordo com o tempo
-```
-
-S3 Transfer Acceleration:
-```
-Transf. de grandes quantidades de dados em uma distância (region) muito longa (Alocado em Edge Location (Cloudfront)) de forma mais ágil.
-```
-
-Hospedando um site estático em um S3 Bucket:
+Hospedando um site estático em um S3 Bucket Websites:
 ```
  Acesso imediato. Nome único. Ideal para conteúdo estático
 	•	Acesso via Console, CLI e SDK
@@ -496,42 +508,197 @@ Hospedando um site estático em um S3 Bucket:
 	•	Objetos no S3 são armazenados em Buckets. Nomes dos objetos são Object Key, versões são Version ID e endereço são Link Address
 	•	Definições para objetos e buckets	
 		Politica de acesso (policy)
-		Versionamento
+		Versionamento - habilitada via propriedades do bucket, protege de remoção de arquivos inesperada/erronea via restore version. Possibilidade de rollback. 
 		Criptografia
 	•	Cross-Region Replication - Objetos de um bucket de uma região para outra. 
 ```
 
-Glacier (Object Storage):
+Durability == em quanto tempo voce pode perder o arquivo, +-10 mil anos em média
+Availability == o quão está disponível, varia dependendo da classe e pode ficar até 53min indisponivel ao ano.
+
+Amazon S3:
+Classes de armazenamento (6 storage class):
 ```
- Archiving. Acesso não imediato. Ideal para objetos que você não usa mais, objetos arquivados, backups e arquivos retidos por quetões legais.
+1 - Standard - General Purpose: 
+		classe padrão, para objetos acessados frequentemente
+		pouca lentencia. 
+		Ex.: Big Data
+
+2 - Intelligent-Tiering:
+		automaticamente mover dados entre classes de armazenamento de  acordo com o acesso,
+		mesma performance que a Standart, mas podendo ser mais economica.
+
+3 - Standart-Infrequent Access: 
+		dados que não são acessados com frequencia
+		pode requerer recuperação rápida quando necessário.
+		melhor custo benefício em comparação ao Standart General
+		Aguenta a integridade dos objetos por até 2 falhas
+		Caso de uso: Disaster recovery, backup.
+
+4 - One Zone IA: 
+		dados não acessados frequentemente
+		mas hospedado em apenas uma zona de disponibilidade.
+		menor disponibilidade
+		20% mais barato que S3-IA
+		Caso de uso: backup secundário de BD on-premise, armazenamento de arquivos que podem ser recriados.
+```
+
+Storages para Backup:
+5 - Glacier (Object Storage):
+```
+ Archiving. Acesso não imediato. 
+ Ideal para objetos que você não usa mais, objetos arquivados, backups e arquivos retidos por quetões legais.
  Possibilidade de configuração de quando esses dados podem ser acessados, 90 dias  mínimo.
- Pode ser recuperado em horas.
+ Pode ser recuperado em horas. Valor mais acessível.
+ Opções de recuperação:
+	Expedited - 1/5 min
+	Standard - 3/5h
+	Bulk - 5/12h
 ```
 
-S3 Glacier Deep Archive:
+6 - S3 Glacier Deep Archive:
 ```
-é a classe de armazenamento de menor custo do Amazon S3 e oferece suporte para retenção de longo prazo e preservação digital para dados que podem ser acessados uma ou duas vezes por ano.
+é a classe de armazenamento de menor custo do Amazon S3
+Opção para recuperação sem pressa.
+oferece suporte para retenção de longo prazo e preservação digital para dados que podem ser acessados uma ou duas vezes por ano.
+Opções de recuperação:
+	Standard - 12h 
+	Bulk - 48h
 ```
 
-Storage Gateway (Armazenamento híbrido) -  Permite conectar arquivos, volumes e backups entre AWS e storage local
+S3 Object Lock & Glacier Vault Lock:
+```
+Object Lock:
+	Modelo WORM(Write Once Read Many)
+	Bloqueia em uma versão do objeto por um tempo especifico, sem modificações posterioes
+
+Glacier Vault Lock:
+	Força que a policy seja mantida.
+	Possibilidade de controles
+	Uma vez trancada, não é possível abrir novamente a policy.
+```
+
+Ciclo de vida (Lifecycle Policie):
+```
+Mover/Deletar entre diferentes classes de acordo com o tempo e frequencia de acesso
+```
+
+S3 Transfer Acceleration:
+```
+Transf. de grandes quantidades de dados em uma distância (region) muito longa (Alocado em Edge Location (Cloudfront)) de forma mais ágil.
+```
+
+Storage Gateway (Armazenamento híbrido)
+```
+ Permite conectar arquivos, volumes e backups entre AWS e storage local
+ Hybrid cloud strategy, onde a Cloud aumenta os recursos locais da empresa
+ Tipos:
+	File
+	Volume
+	Tape
+```
+
+Cross-Account Access via Bucket Policy:
+```
+Definifir Allow/Autorização no bucket via bucket policy, citando qual conta pode ter acesso e com quais ações
+Aws disponibiliza policiy generator para guia de policies seguras
+```
+
+Settings for Block Public Access:
+```
+Feito para evitar Data leaks(quando um dado sensível é exposto)
+Pode ser uma configuração a nivel de conta
+```
+
+S3 Access Logs:
+```
+Modo para efetuar analises de quem está tendo contato com aquele bucket, habilitado na propriedade do bucket.
+Os logs são direcionados para outro bucket
+```
+
+S3 Replication:
+```
+Necessário habilitar Versionamento nos buckets de origem e destino.
+Regras definidas em Gerenciamento/Management
+Podem estar em contas diferentes
+Cópia Assincrona
+IAM necessita ter a permissão nas contas.
+Tipos:
+	CRR - Cross Region Replication:
+		Compliance
+		Pouca latencia
+		Replicação entre contas
+	SRR - Same Region Replication:
+		Agregação de logs
+		Replicação em tempo real entre contas de produção/teste
+```
+
+Modelo de Responsabilidade compartilhada:
+```
+Aws:
+	Infraestrutura
+	Configuração e análise de vulnerabilidade
+	Compliance
+User: 
+	S3 Versioning
+	S3 Bucket Policies
+	S3 Replication Setup
+	S3 Storage
+	Logs e monitoria
+	Data encryption
+```
+
+Ferramentas para coleta/migração de dados para/fora a Aws:
+	Desafios que supera:
+		Conexão limitada/instável
+		Alto custo de transferencia caso não tenha link de internet
+		Consumo de toda a banda da empresa para fazer a transferencia
+	Aws Snow Family:
+		equipamentos offline para migração de dados
+		se leva +1 semana para transferir pela internet, use um dispositivo Snow da Aws!
 
 Snowball
 ```
 (Transf. de dados para a AWS)
 Dispositivo físico. Suporta Petabytes.
-Amazon enviaum dispositivo, coleta e envia para a cloud
+Amazon enviam dispositivo, coleta e envia para a cloud
+```
+
+Ferramenta para migração de dados de Edge Computing
+	EdgeComputing = locais como estrada, navios, minas
+	Não necessariamente possui acesso a internet
+	Conexões/Energia Limitadas
+	Rodam em Ec2 eLambdas
+	Necessitam de Aws CLI, podendo usar o software OpsHub para gerenciar o processo de migração.
+
+Snowball Edge (Dispositivo para processamento de serviços como EC2 e Lambda):
+```
+ Suporta 100 TB até 10PB
+ Oferece recursos de computação
+ Permite utilização em locais sem acesso a cloud e posterior sincronização (Navios, fábricas, desertos)
+ Tipos:
+	Storage Optimized: 80 TB de HDD, compatível com S3 object, ideal para transferencias regulares
+	Compute Optimized: 42 TB dde HDD, ideal para servicoes como stream
+Casos de uso: Grande transferencia de dados para a nuvem, DC decomposição, disaster recovery 
+```
+
+AWS Snowcone:
+```
+is a small, portable, rugged, and secure edge computing and data transfer device.
+It provides up to 8 TB of usable storage.
+Em casos onde a empresa quer transferir até 8 TB para a Aws mas não possui os melhores recursos
+Pode ser enviado para a Aws o dispositivo ou conectalo e enviar via internet usando Aws Datasync
 ```
 
 Snowmobile
 ```
-(Transf. de dados para a AWS)
-Suporta 100 PB
-Caminhão + Container entregue.
-Aws configura, recolhe e envia para a cloud
-Casos extremos 
+(Transf. de dados para dentro ou para fora da Aws)
+Suporta 1000 PB //1 EB
+Literalmente um Caminhão Container entregue pela Aws.
+	Cada caminhão suporta 100PB
+Aws configura, recolhe e envia para a cloud.  Altamente seguro
+Casos extremos onde a tranferencia é de mais 80 PB
 ```
-
-Snowball Edge (Dispositivo para processamento de serviços como EC2 e Lambda) - Suporta 100 TB. Permite utilização em locais sem acesso a cloud e posterior sincronização (Navios, fábricas, desertos)
 
 
 ### Cenários <a name="cenarios02"></a>
@@ -570,6 +737,15 @@ Snowball Edge (Dispositivo para processamento de serviços como EC2 e Lambda) - 
 
 12 - Emi procura um sistema de compartilhamento de arquivos entre 8 diferentes instanes Ec2 Linux, beirando 1PB. Qual a melhor ferramenta?
 ==> EFS
+
+Resumo de Opções de Armazenamento:
+	Block - EBS + Ec2 Instance Store
+	FILE - EFS
+	Object - S3 // Glacier
+	Buckets e Objetos precisam de nome único e direcionamento para uma região
+	S3 security: IAM policy, s3bucket policy, s3 encryption
+	S3 lifecycle Rules: transição de objetos entre diferentes classes
+
 # 3. O que cai na prova
 
 Armazenamento
@@ -790,9 +966,7 @@ Region
 Aurora
 Cresce o armazenamento de forma automática
 
-Elasticity
-Dividir o trafego de acordo com a demanda
-Dividir o trafego de acordo com a carga miníma (least load) necessária
+
 
 EBS (Modelo de segurança compartilhada)
 Cliente cria snapshot
