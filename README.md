@@ -10,12 +10,18 @@
 	2. [IAM](#IAM)
 	3. [Content and Network Delivery Services](#ContentNetworkDeliveryServices)
 	4. [File Storage Service](#FileStorageServ)
-	5. [Cenários](#cenarios02)
+	5. [Databases & Analytics](#databases)
+	6. [Cenários](#cenarios02)
+4. [Other Compute Services](#OtherCompServ)
+	1. [ECS](#ECS)
+	2. [Fargate](#Fargate)
+	3. [ECR](#ECR)
+	4. [Serverless](#Serverless)
 
 ## Introduction <a name="introduction"></a>
 Habilidades validadas pela certificação
 
-```python
+```
 Conhecimento da infra AWS
 Conhecimento da arquitetura AWS
 Proposta de valor
@@ -25,9 +31,11 @@ Segurança
 Definição de preço
 Onde encontrar documentação e suporte
 Como implementar isso na prática
+Aws consegue reduzir seus valores por conta do Economies of scale.
 ```
+
 Domínios
-```bash
+```
 Cloud Concepts = Proposta de valor, casos de uso e etc
 Security = Segurança e conformidade 
 Technology = Os serviços da AWS em sí 
@@ -37,17 +45,20 @@ Billing and Pricing = Precificação
 Tempo de prova: 90 min.
 Valor: $100
 Validade: 3 anos
+Qtd questões: 50
+Pontos mínimos para aprovação: 700pts === 35 qts
 Não existe limitação de quais certificações primeiro entregar, pode ser feito em qualquer ordem.
 
 ## Principais Conceitos <a name="conceitosIniciais"></a>
 Principais conceitos de Cloud Computing e principais conceitos da nuvem da AWS como infra e acesso a nuvem da AWS
 
 Conceito cloud:
-```bash
+```
 	•	On demand delivery
 	•	entregue através de uma plataforma via internet
 	•	Precificação baseada em consumo (pay-as-you-go)
 ```
+
 Vantagens:
 ```
 	•	Mudança na modalidade de gastos (CAPEx x OPEx) - Pague pelo que consumir
@@ -73,7 +84,7 @@ Tips de instalação:
 ```
 
 Elasticity:
-	- Possibilildade de adquirir/utilizar recursos de acordo com a demandae liberálos quando não precisar mais.
+	- Possibilildade de adquirir/utilizar recursos de acordo com a demanda e liberálos quando não precisar mais.
 
 Reliability - Confiança:
 	- Sempre disponível com recursos para seus clientes.
@@ -193,8 +204,10 @@ Planos de suporte AWS
 	•	Developer - a AWS recomenda o suporte ao desenvolvedor se você estiver testando ou desenvolvendo antecipadamente na AWS e quiser obter suporte técnico por e-mail durante o horário comercial, bem como orientação geral de arquitetura durante a construção e o teste. Você não obtém acesso ao Gerenciamento de eventos de infraestrutura com este plano. Este plano oferece suporte apenas para orientações gerais de arquitetura. Começa com $29.
 
 	•	Business - a AWS recomenda o suporte de negócios se você tiver cargas de trabalho de produção na AWS e quiser acesso 24x7 por telefone, e-mail e chat para suporte técnico e orientação arquitetônica no contexto de seus casos de uso específicos. Você obtém acesso total às Verificações de práticas recomendadas do AWS Trusted Advisor. Você também obtém acesso ao Gerenciamento de eventos de infraestrutura por uma taxa adicional. Começa com $100.
+	Em caso de falha == Open a production system down support case
 
 	•	Enterprise - O AWS Enterprise Support oferece aos clientes serviços semelhantes aos de concierge, em que o foco principal é ajudar o cliente a alcançar seus resultados e ter sucesso na nuvem. Com o Enterprise Support, você obtém suporte técnico 24 horas por dia, 7 dias por semana, de engenheiros de alta qualidade, ferramentas e tecnologia para gerenciar automaticamente a integridade do seu ambiente, revisão consultiva e orientação com base em seus aplicativos e um Gerente Técnico de Conta (TAM) designado para coordenar o acesso ao proativo / programas preventivos e especialistas no assunto da AWS. Este plano oferece suporte à orientação arquitetônica contextual à sua aplicação.
+
 ```
 
 ### Cenários <a name="cenarios01"></a>
@@ -323,7 +336,8 @@ Compute services -> 4 principais serviços
 EC2 (Máquina virtual):
 ```
 Casos de uso: Web application hosting, batch processing(processamento de dados), servidor API, Desktop in the cloud;
-
+Para rodar comandos: Campo User Data
+Reduced operational overhead
 Conceitos:
 	- Intance Types não podem ser alteradas em um downtime, algumas possuem capacidades únicas.
 
@@ -335,10 +349,10 @@ Conceitos:
 	- AMI - Amazon Machine Image: Templates para EC2 com configurações e S.O. prontos para utilização, podendo ser personalizados.
 
 	- Modalidades de precificação:
-	    On demand - Pay-as-you-go, preços por hora
-	    Reservada - 1 ou 3 anos, desconto de até 75%, pagamento à vista, ou parte à vista parte mensal, somente mensal. Podem ser Standart(maior desconto), Convertible ou Schedule.
+	    On demand - Pay-as-you-go, preços por hora, bom para ad-hoc
+	    Reservada - 1 ou 3 anos, desconto de até 75%, pagamento à vista, ou parte à vista parte mensal, somente mensal. Podem ser 	  Standart(maior desconto), Convertible ou Schedule.
 	    Spot - Leilão, cliente define um preço a pagar pela capacidade ociosa da AWS, se preço é aceito instância é provisionada, tempo de utilização limitada
-	    Dedicado (Servidor fisico e dedicado)- Preço por hora, descontos chegam a 70%, mas é a opção mais cara
+	    Dedicado (Servidor fisico e dedicado)- Preço por hora, descontos chegam a 70%, mas é a opção mais cara. Softwares com licença.
 
 	* Se quiser que a instancia esteja sempre disponível: Stardart ou Convertible Reserved;
 	* Se possui serviços que não são afetados por uma possível interrupção da EC2 ==> Spot Instances
@@ -367,8 +381,6 @@ execução de códigos sem provisionamento de infra,
 pay-as-you-go,
 Programação orientada a eventos (Trigger)
 ```
-ECS (Gestão de containers - Suporte a Docker)
-
 
 Elasticity:
 ```
@@ -430,7 +442,8 @@ VPC:
 É a sua rede particular, isolada e privada dentro da AWS.
 Suporta IPv4 e IPv6, podendo ser pública ou privada, ou somente privada para quem tiver acesso a VPC
 É possível configurar: Range de IP, Subnets, Route tables, network gateways
-
+Suporta multiplos AZ
+A VPC spans all the Availability Zones in the region
 Tipos:
 	•	Padrão - Para cada conta AWS é criada uma rede padrão (VPC) com configs básicas pela própria AWS onde novas funcionalidades podem ser adicionadas
 	•	Não Padrão - O cliente cria de acordo com a sua necessidade para cada region
@@ -440,13 +453,18 @@ Subredes (subnets):
 		•	Route Tables - Controla o tráfego que sai das subnets
 		•	Internet Gateway - Permite que a VPC tenha acesso a internet
 		•	NAT Gateway - Permite que subnets tenham acesso a internet
-		•	Network Acess Control List (NACL) - Controla acesso a subnets
-		•	Security Groups - O firewall
+		•	Network Acess Control List (NACL) - Controla acesso a subnets, allow/ deny ryle, atinge todos os recursos
+		•	Security Groups - O firewall, allow rules, somente alguns recursos
 ```
 
+AWS Transit Gateway
+```
+ is a service that enables customers to connect their Amazon Virtual Private Clouds (VPCs) and their on-premises networks to a single gateway.
+```
 Aws Direct Connect:
 ```
 	Facilita a conexão entre um DC local diretamente para a Aws, sem exposição do tráfico.
+	Mesma região
 ```
 
 CloudFront:
@@ -458,8 +476,11 @@ Inclui camadas de segurança(WAF, Shield for DDoS)
 
 API Gateway:
 ```
-É um serviço gerenciado que permite que desenvolvedores criem, publiquem, mantenham, monitorem e protejam APIs em qualquer escala com facilidade.
+É um serviço gerenciado que permite que desenvolvedores criem, publiquem, mantenham, monitorem e protejam APIs(Rest, WebSocket) em qualquer escala com facilidade.
 Integrado com diversos serviços, provendo monitoramento e metricas
+Serverless and scalable
+arquitetura:
+Client <-- Rest API --> API GATEWAY <--Proxy Requests--> Lambda <--CRUD--> DynamoDB
 ```
 
 AWS Global Accelerator:
@@ -484,6 +505,7 @@ Multipos tipos  de volumes:
 	SSD Prov IOPS - Permite definir IOPS DB (io1)
 	Throughput Optimized HDD - Disco magnetico alta taxa de transferência BigData (st1)
 	Cold HDD - Arquivo (sc1)
+snapshot in s3
 ```
 
 EFS (Armazenamento de arquivos):
@@ -593,9 +615,10 @@ Storage Gateway (Armazenamento híbrido)
  Permite conectar arquivos, volumes e backups entre AWS e storage local
  Hybrid cloud strategy, onde a Cloud aumenta os recursos locais da empresa
  Tipos:
-	File
-	Volume
-	Tape
+	Amazon S3 File Gateway,
+	Amazon FSx File Gateway,
+	Tape Gateway e Volume Gateway
+The Gateway Virtual Tape Library can be used with popular backup software such as NetBackup, Backup Exec and Veeam.
 ```
 
 Cross-Account Access via Bucket Policy:
@@ -674,7 +697,7 @@ Ferramenta para migração de dados de Edge Computing
 Snowball Edge (Dispositivo para processamento de serviços como EC2 e Lambda):
 ```
  Suporta 100 TB até 10PB
- Oferece recursos de computação
+ Oferece recursos de computação - EC2
  Permite utilização em locais sem acesso a cloud e posterior sincronização (Navios, fábricas, desertos)
  Tipos:
 	Storage Optimized: 80 TB de HDD, compatível com S3 object, ideal para transferencias regulares
@@ -700,7 +723,174 @@ Aws configura, recolhe e envia para a cloud.  Altamente seguro
 Casos extremos onde a tranferencia é de mais 80 PB
 ```
 
+Macie
+```
+Amazon Macie is a fully managed data security and data privacy service that uses machine learning and pattern matching to discover and protect your sensitive data in Amazon S3.
 
+Macie applies machine learning and pattern matching techniques to the Amazon S3 buckets you select to identify and alert you to sensitive data, such as personally identifiable information (PII).
+```
+
+Amazon Elasticsearch Service
+```
+is involved with operational analytics such as application monitoring, log analytics and clickstream analytics. Amazon Elasticsearch Service allows you to search, explore, filter, aggregate, and visualize your data in near real-time.
+```
+### Databases & Analytics <a name="databases"></a>
+Estruturação dos dados que forem alocados, com maior eficiencia nas consultas.
+Possui:
+	BD Relacional ==> quando uma tabela é pensada para ser referenciada em outra.
+					  utilização de linguagem SQL para efetuar consultas
+	BD NoSQL ==> é um BD Key-value, suporta arrays e mudanças via Json
+				 Com maior Flexibilidade, Escabilidade, High-Performance
+				 Ex.: JSON	
+	Opção Gerenciada pela Aws, onde cuidam de toda a infra.
+
+Serviços de banco de dados
+RDS - Relational Database Service:
+```
+PasS
+100% gerenciado. Escolha de tipo de instância. Escalável vertical e horizontalmente. 
+Simplifica as tarefas de administracao.
+Benefícios:
+	Continuos Backups Aplicação patches (PostgreSQL, Amazon Aurora, Oracle, MySQL, MariaDB, SQL Server)
+	•	Alta Escalabilidade - Computação, storage e #Read Replicas (Performance - É um snapshot (cópia de leitura) que pode ser disponibilizado em outras AZs ou Regions)
+	•	Alta disponibilidade - Backups Automáticos, snapshots e #Mult-AZ deployments (Disaster Recovery - Master em uma AZ e uma replica em outra AZ. Chaveamento para apontar para outra instancia de 60 a 120 segundos)
+Não é possível acesso via  SSH
+Aws faz o software patching
+Online Transaction Processing - OLTP
+Arquitetura behind:
+	ELB + Ec2 Instances == RDS
+	
+Modos de deploy:
+	Read Replicas:
+		Criação de até 5 replicas que podem ficar LENDO*READ* a aplicação
+		Para WRITE somente o RDS Main pode fazer
+	Multi-AZ:
+		Possibilita HA em caso de alguma AZ falhar
+		Pilar de reability da Aws Well-Archtecture
+	Multi-Region(Read Replicas):
+		Possbilidade de aplicar a técnica de ReadReplicas CrossTregion
+		Melhor performance de acordo com a regiao que o cliente esta
+		Possibilidade de recovery em caso de desastre em uma regiao
+```	
+Amazon Aurora
+```
+OLTP -  Online Transaction Processing 
+ - Compatível com MySQL e Postgre (mais rápido que os dois) e funciona com instância ou servless
+						custa 20%menos
+						cresce de forma automática
+						não disponível em free tier, não opensource
+						feito para ser a opção mais ágil em Cloud
+						backup automatico
+Relacional
+cloud-optimized
+```
+DynamoDB:
+```
+Milhoes de requisicoes por seg, pouca latencia
+replicacao em ate 3 AZ
+Tipo de dado: key/value
+Serverless. NoSQL. 100% gerenciado. Escalavel. (Aplicações web, mobile, IoT e Jogos)
+	•	Métricas de utilização e operacionais no CloudWatch
+	•	Capacidade adaptável
+	•	Backup e recuperação sob demanda point-in-time
+	•	TTL - Time to Live, fermite definir a vida útil do dado
+	•	DAX (DynamoDB Accelerator) - Uso de cache de memória gerenciado e altamente disponível
+	•	DEV - Uso local, streams (criar sequencias quando alterações acontecerem nas tabelas do Dynamo DB) e Trigger, executar código Lambda baseado em uma condição
+``` 
+
+RedShift (Colunar)
+```
+Baseado em PostgreSql, pay-as-you-go
+100% gerenciado.Escalável. Envio de dados de 1h em 1h
+OLAP - Online Analytical Processing
+Data warehouse, Big data e data lake (volume alto de dados)
+SQL interface para consultas
+Caso de uso: used for analytics applications using SQL
+```
+
+ElastiCache
+```
+In-memory databases com alta permofomance e baixa latencia
+Ajuda a reduzir o trafego no RDS, pois aproveita resultados ja obtidos anteriormente.
+Arquitetura == EC2 Instances + Read/Write RDS + Read/write ElastiCache In-memory
+```
+
+EMR
+```
+Elastic MapReduce
+Hadoop clusters(BigData) para analisar e processar grande quantidade de dados
+Feito de varias EC2 
+```
+
+Athena
+```
+Serverless DB com funcoes SQL
+usado para salvar consultas em S3
+pay per query
+Casos de uso: one-time queries, logs analytics
+```
+
+Amazon QuickSight:
+```
+dashboard que possibilita administracao visual dos BD
+Escalavel automaticamente, integrado com todos os BD disponiveis na Aws
+casos de uso = Business Analytics, Ad-hoc analysis
+```
+
+DocumentDB
+```
+NoSQL
+Aws implementando o mesmo que o MongoDB
+MongoDB: armazenar, consultar e criar data em JSON
+Banco de dados de documentos com compatibilidade com o MongoDB
+100% gerenciado, possibilidade de alta disponibilidade com replicacao entre 3 AZ
+Até 64TB
+Escala automaticamente com workloads de milhoes de requests por seg
+```
+
+Neptune
+```
+Graph Database
+Altamente disponivel com 3 AZ, com possibilidade de ate 15 replicas
+Casos de uso: biblioteca de conteudos, fraud detection, redes sociais
+```
+
+QLDB - Quantum Ledger Database
+```
+Ledger - Livro registro de transacoes financeiras
+100% gerenciado, Serverless, replicacao entre 3 AZ
+Usado para revisar todo o historico de aplicacoes no BD
+Imutável: sem possibilidade de remocao e com assinatura de criptografia disponivel
+Possibilidade de manipulacao com linguagem SQL
+2x melhor performance que Blockchain
+```
+
+Managed Blockchain
+```
+Faz com que seja possível publicar aplicacoes com transicoes sem a necessidade de uma CA autenticadora
+Caso de uso: se uniar a publick boclchain networds
+compativel com Hyperledger e ethereum
+```
+
+AWS Glue
+``` 
+O AWS Glue é um serviço de extração, transformação e carregamento (ETL) totalmente gerenciado que torna mais fácil para os clientes preparar e carregar seus dados para análise.
+prepare/transform data for analytics
+Serveless
+
+Glue data catalog == central repository to store stuctural and operational metadata for all data assets.
+```
+
+Amazon Simple Workflow Service (SWF) is a web service that makes it easy to coordinate work across distributed application components. SWF enables applications for a range of use cases, including media processing, web application back-ends, business process workflows, and analytics pipelines, to be designed as a coordination of tasks.
+
+DMS
+```
+Database Migration Service viabiliza migrações homogêneas, como de Oracle para Oracle,
+além de migrações heterogêneas entre plataformas de banco de dados diferentes, como de Oracle ou de Microsoft SQL Server para Amazon Aurora.
+BD permanece disponivel durante a migração
+
+Glue Data Catalog: catálogo dos seus BD, pode ver a estruturade cada
+```
 ### Cenários <a name="cenarios02"></a>
 1 - Roger possui uma aplicação em React que precisa que ada usuário cadastrado  seja salvo n Aws Cognito de modo personalizado. Qual o melhor método de utilização?
 ==> Aws SDK
@@ -746,13 +936,69 @@ Resumo de Opções de Armazenamento:
 	S3 security: IAM policy, s3bucket policy, s3 encryption
 	S3 lifecycle Rules: transição de objetos entre diferentes classes
 
-# 3. O que cai na prova
+## Other Compute Services<a name="OtherCompServ"></a>
+ECs, Fargate, ECR
 
-Armazenamento
-Redes e entrega de conteúdo
-Banco de dados
+### ECS - Elastic Container Service <a name="ECS"></a>
+Elastic Container Service
+Cria containers Docker na Aws com o usuário criando EC2 instances
+Integração com Application Load Balancer
+Aws cuida do start/stop do container
 
+### Fargate <a name="Fargate"></a>
+Cria container Docker 100% gerenciados
+Usuário não cria EC2, mais fácil
+Serverless
+Aws roda o container de acordo com CPU/RAM necessário
 
+### ECR - Elastic Container Registry <a name="ECR"></a>
+Registro/Arquivo privado de imagens Docker
+
+### Serverless <a name="Serverless"></a>
+É um modelo de desenvolvimento nativo em nuvem para criação e execução de aplicações sem o gerenciamento de servidores.
+Apenas deploy do codigo/função
+Não significa que não possui servidor, apenas não é gerenciado por nós
+ex.: Lambda(pioneira), S3, DynamoD, Fargate
+
+Lambda
+```
+Virtual functions
+sem servidores para gerenciar == Serverless
+limitados por tempo, com  curtas execuções
+roda on-demand
+Pricing is based on calls and durations:
+	Per Calls: 1M are free, after $0.20 
+	Per Duration: 400KGB-seg ofcomputetime per month is FREE
+				  After that $1.00 for 600K GB-seg
+	usualmente mais barata e popular	
+Integrado com todos os serviços Aws
+Invocado somente com evento ou quando neccessário
+fácil monitoramento via CloudWatch
+roda várias linguagens(Python, c#,Java, Ruby..)
+Limites: 15 min de job, runtimes, temporary disk space
+CRON Job: Configurando um trigger no CloudWatch  Events,a lambda irá ser acionada no período configurado
+event-driven = invocada  quando necessario
+```
+
+Aws Batch
+```
+Lote de processamento dinamico em qualquer escala, de acordo com a demanda
+sem necessidade de gerenciamento de infra
+é um job que tem início e fim, oposto de contínuo
+automaticamente cria Ec2 instances // Spot Instances através de um ECS
+Ajuda em otimização de custos e foca menos em infraestrutura
+sem tempo limte
+```
+
+Amazon Lightsail
+```
+Aws faz o deploy total da aplicação para um usuário iniciante com conhecimento limitado
+Preço baixo e previsível
+ótimo para pessoas com pouco conhecimento
+Notificações e monitoramento de recursos deployados
+Casos de uso: Web Applications(LAMP, Nginx..), Websites(Wordpress, Joomla..), Dev/Test environment
+Hight availability but no auto-scaling, limited Aws integrations
+```
 AWS Well-Architected Framework
 https://wa.aws.amazon.com/index.pt_BR.html
 
@@ -771,6 +1017,10 @@ Security - Proteção de sistemas
 Reliability - Capacidade de evitar e se recuperar rapidamente das falhas para atender a demanda comercial e de clientes
 	•	Principais tópicos: Elementos básicos sobre configuração, requisitos entre projetos, planejamento de recuperação e como lidamos com as mudanças
 	•	Principais serviços: AWS CloudFormation, Amazon CloudWatch, S3, Glacier
+	Casos de uso: Testing recovery procedures
+				  Automatically recoring from failure
+				  Use AWS Conﬁg to generate an inventory of AWS resources
+				  Use AWS CloudTrail to record AWS API calls into an auditable log ﬁle
 
 Perfomance Efficiency - Uso eficiente de recursos de TI e computação
 	•	Principais tópicos: Seleção dos tipos e todos tamanhos certos dos recursos tomando como base os requisitos de carga de trabalho, a performance do monitoramento e a tomada de decisões funcdamentadas para manter a eficiência à medida que as necessidades comerciais evoluem
@@ -784,7 +1034,9 @@ Cost Optimization - Evitar gastos desnecessários
 AWS_Well-Architected_Framewor...746.1 KB
 
 AWS Trusted Advisor
-Performance, custo e segurança dos recursos AWS
+Avaliacao de Performance, custo e segurança dos recursos AWS
+faz avaliacao do que esta sendo inutilizado para reducao de custos
+trusted x cost explorer
 
 Tópicos:
 Cost Optimization
@@ -803,24 +1055,12 @@ Firewall propriamente dito
 
 AWS Integrated Services
 
-Serviços de banco de dados
-
-DynamoDB - Serverless. NoSQL. 100% gerenciado. Escalavel. (Aplicações web, mobile, IoT e Jogos)
-	•	Métricas de utilização e operacionais no CloudWatch
-	•	Capacidade adaptável
-	•	Backup e recuperação sob demanda point-in-time
-	•	TTL - Time to Live, fermite definir a vida útil do dado
-	•	DAX (DynamoDB Accelerator) - Uso de cache de memória gerenciado e altamente disponível
-	•	DEV - Uso local, streams (criar sequencias quando alterações acontecerem nas tabelas do Dynamo DB) e Trigger, executar código Lambda baseado em uma condição
-
-RDS - 100% gerenciado. Escolha de tipo de instância. Escalável. Backup Aplicação patches (PostgreSQL, Amazon Aurora, Oracle, MySQL, MariaDB, SQL Server)
-	•	Alta Escalabilidade - Computação, storage e #Read Replicas (Performance - É um snapshot (cópia de leitura) que pode ser disponibilizado em outras AZs ou Regions)
-	•	Alta disponibilidade - Backups Automáticos, snapshots e #Mult-AZ deployments (Disaster Recovery - Master em uma AZ e uma replica em outra AZ. Chaveamento para apontar para outra instancia de 60 a 120 segundos)
-	•	Amazon Aurora - Compatível com MySQL e Postgre (mais rápido que os dois) e funciona com instância ou servless
-
-RedShift (Colunar)- 100% gerenciado. Escalável. Dataware House, Big data e data lake (volume alto de dados)
-
-
+AWS Step Functions
+```
+ lets you coordinate multiple AWS services into serverless workflows so you can build and update apps quickly.
+  AWS Step Functions lets you build visual workflows that enable fast translation of business requirements into technical requirements.
+  assincrono
+```
 AWS CloudTrail
 Registra QUEM fez O QUE em QUAL RECURSO e QUANDO
 	•	Trilhas para eventos específicos (serviço, ação, usuário e etc)
@@ -831,6 +1071,10 @@ CloudWatch
 Serviço de monitoração que monitora meus recursos na AWS
 	•	Collect, Monitor, act and Analyse
 	•	Ações - CloudWatch Events para responder a eventos como a partir de um problema de performance eu executar o Auto Scaling e adicionar mais máquinas
+	Basic monitoring collects metrics every 5 minutes 
+	detailed monitoring collects metrics every 1 minute
+	Amazon CloudWatch is a monitoring service for AWS cloud resources and the applications you run on AWS. 
+	CloudWatch performs performance monitoring and can monitor custom metrics generated by applications and the operational health of your AWS resources
 
 CloudTrail x CloudWatch = Acesso a recursos x Monitoração dos recursos
 
@@ -857,9 +1101,11 @@ AWS Rekognition
 Analise de imagens e videos utilizando Machine Learning retornando informações categorizadas e classificadas
 
 AWS Config
+```
 Serviço que fornece uma visão detalhada da configuração dos recursos da AWS em sua conta da AWS. Qualquer recurso que esteja habilitado na AWS, essa configuração é registrada e pode ser gerênciada via AWS Config.
 	•	Configurações presentes e passadas
 	•	Avaliação de recursos com regras - Avalia se um recurso esta em conformidade com uma regra de configuração. Regras Gerenciadas são criadas e mantidas pela AWS. Regras Personalizadas são regras criadas pelo cliente.
+```
 
 # 5. O que cai na prova
 Principais casos de uso do AWS Config: Administração de recursos, auditoria e compatibilidade, Gerenciar e solucionar problemas e análise e segurança
@@ -869,6 +1115,7 @@ Serviço de notificação da AWS. Divide-se em Publicador, tópico e assinantes 
 
 AWS SQS
 Serviço de filas de mensagens (mensageria). Divide-se em Produtor e consumidor
+Assincrono
 
 AWS SES
 Envio e recebimento de emails em alta escala (email MKT, email transacional, notificações e recebimento) e custo efetivo
@@ -885,7 +1132,7 @@ Segurança na AWS
 
 	•	AWS IAM - Gestão de usuários e acessos - Serviço Global
 	•	AWS KMS - Gestão de certificados
-	•	AWS Shield - Proteção de DDoS
+	•	AWS Shield - Proteção de DDoS contra exploits comuns
 	•	AWS WAF - Firewall para aplicações web
 	•	AWS Inspector - Analise de vulnerabilidades
 	•	AWS GuardDuty - Monitoração de ameaças baseado em machine Leaning
@@ -923,8 +1170,6 @@ Firewall para aplicações web
 
 AWS Organizations
 Serviço que gerencia contas da AWS
-
-
 
 MFA
 Camada a mais de autenticação
@@ -995,9 +1240,7 @@ Your company is planning to host resources in the AWS Cloud. They want to use se
 https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/Welcome.html
 SQS permite integrar e desacoplar sistemas e componentes de software distribuídos
 
-Ver um pouco de DMS
-https://aws.amazon.com/dms/
-Database Migration Service viabiliza migrações homogêneas, como de Oracle para Oracle, além de migrações heterogêneas entre plataformas de banco de dados diferentes, como de Oracle ou de Microsoft SQL Server para Amazon Aurora.
+
 
 Which of the following does AWS perform on its behalf for EBS volumes to make it less prone to failure?
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html
@@ -1079,14 +1322,10 @@ Converte automaticamente fala em texto
 Amazon Polly 
 Amazon Polly é um serviço que transforma texto em fala real, permitindo que você crie aplicativos que falam e construa categorias inteiramente novas de produtos habilitados para fala.
 
-AWS Glue 
-O AWS Glue é um serviço de extração, transformação e carregamento (ETL) totalmente gerenciado que torna mais fácil para os clientes preparar e carregar seus dados para análise.
+
 
 Which of the following AWS services support reservations to optimize costs? (Select three)
 Serviços com possibilidade reserved
-
-DocumentDB
-Banco de dados de documentos com compatibilidade com o MongoDB
 
 AWS Shield Advanced provides expanded DDoS attack protection for web applications running on which of the following resources?
 Route53, AWS Global Accelerator
@@ -1094,9 +1333,6 @@ Route53, AWS Global Accelerator
 
 A cyber forensics team has detected that AWS owned IP-addresses are being used to carry out malicious attacks. As this constitutes prohibited use of AWS services, which of the following is the correct solution to address this issue?
 AWS Abuse Team
-
-
-
 
 Which of the following AWS services support VPC Endpoint Gateway for a private connection from a VPC? (Select two)
 VPC Endpoint permite que você conecte de forma privada seu VPC a serviços AWS suportados e serviços de ponto de extremidade VPC fornecidos por AWS PrivateLink. Apenas S3 e DynamoDB são compatíveis com VPC Endpoint Gateway.
@@ -1135,3 +1371,15 @@ A escalabilidade é a medida da capacidade de um sistema de crescer para acomoda
 AWS Artifact
 O AWS Artifact é sua primeira opção de recurso para informações relacionadas à conformidade que importam para você. Ele oferece acesso sob demanda aos relatórios de segurança e conformidade da AWS e a acordos online específicos.
 
+Quick Starts = faz o deploy para o usuario
+Aws Outposts = ver o que é, conecta no onpremise e tem conexao na Aws com baixa latencia.
+Puppet e Chef = AwsOpsWork
+SCP = policy a nivel de conta
+
+loose coupling = microservicos independentes
+TCO == you need to document all of the costs you’re incurring today to run your IT operations. That includes facilities equipment installation and data center security costs. That way you get to compare the full cost of running your IT on-premises today, to running it in the cloud.
+
+CloudHSM
+```
+Hardware Secrets Manager - Serve para o CLIENTE gerenciar suas próprias chaves KMS. Quando ele não quer que esse controle fique na mão da AWS. A AWS manda um aparelho FÍSICO pro cliente, o cliente conecta isso com a nuvem e esse aparelho gera as chaves.
+```
