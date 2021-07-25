@@ -17,6 +17,7 @@
 	2. [Fargate](#Fargate)
 	3. [ECR](#ECR)
 	4. [Serverless](#Serverless)
+5. [Deployments & Managing Infra at Scale](#DeploymentsManag)
 
 ## Introduction <a name="introduction"></a>
 Habilidades validadas pela certificação
@@ -195,13 +196,15 @@ Ferramentas de suporte da Aws:
 	•	AWS Personal Health Dashboard - Uma visão personalizada da saúde dos serviços da AWS e alertas quando seus recursos são afetados. Este plano não oferece suporte a nenhuma orientação arquitetônica.
 
 	- Assistentes para migrações vindo da Aws: Aws Quick Starts, Aws Partner Network Consulting Partness..
+
+	APN Consulting Partners are professional services firms that help customers of all sizes design, architect, build, migrate, and manage their workloads and applications on AWS
 ```
 
 Planos de suporte AWS
 ```
 	•	Basic - O plano básico fornece acesso apenas ao seguinte: Atendimento ao cliente e comunidades - acesso 24 horas por dia, 7 dias por semana ao atendimento ao cliente, documentação, white papers, fóruns de suporte e Trusted Advisor. Sem custo mensal.
 
-	•	Developer - a AWS recomenda o suporte ao desenvolvedor se você estiver testando ou desenvolvendo antecipadamente na AWS e quiser obter suporte técnico por e-mail durante o horário comercial, bem como orientação geral de arquitetura durante a construção e o teste. Você não obtém acesso ao Gerenciamento de eventos de infraestrutura com este plano. Este plano oferece suporte apenas para orientações gerais de arquitetura. Começa com $29.
+	•	Developer - a AWS recomenda o suporte ao desenvolvedor se você estiver testando ou desenvolvendo antecipadamente na AWS e quiser obter suporte técnico por e-mail durante o horário comercial, bem como orientação geral de arquitetura durante a construção e o teste. Você não obtém acesso ao Gerenciamento de eventos de infraestrutura com este plano. Este plano oferece suporte apenas para orientações gerais de arquitetura. Começa com $29.allows unlimited cases to be open. email only support by Cloud Support Associates
 
 	•	Business - a AWS recomenda o suporte de negócios se você tiver cargas de trabalho de produção na AWS e quiser acesso 24x7 por telefone, e-mail e chat para suporte técnico e orientação arquitetônica no contexto de seus casos de uso específicos. Você obtém acesso total às Verificações de práticas recomendadas do AWS Trusted Advisor. Você também obtém acesso ao Gerenciamento de eventos de infraestrutura por uma taxa adicional. Começa com $100.
 	Em caso de falha == Open a production system down support case
@@ -370,11 +373,7 @@ Modelo de Segurança Compartilhada:
 	User: Configuração de SG,aplicação de patches, Softwares que estao na instancia
 ```
 
-Elastic Beanstalk (Deploy de aplicações na web - PaaS):
-```
-Plataforma como Serviço, processo de provisionamento, gerenciamento, deploy é automatizado.
-Casos de uso: deploy de aplicações com pouco conhecimento de como fazer e com poucas personalizações necessárias.
-```
+
 Lambda (Serverless - F(function)aaS):
 ``` 
 execução de códigos sem provisionamento de infra,
@@ -877,7 +876,7 @@ AWS Glue
 O AWS Glue é um serviço de extração, transformação e carregamento (ETL) totalmente gerenciado que torna mais fácil para os clientes preparar e carregar seus dados para análise.
 prepare/transform data for analytics
 Serveless
-
+ETL
 Glue data catalog == central repository to store stuctural and operational metadata for all data assets.
 ```
 
@@ -936,7 +935,7 @@ Resumo de Opções de Armazenamento:
 	S3 security: IAM policy, s3bucket policy, s3 encryption
 	S3 lifecycle Rules: transição de objetos entre diferentes classes
 
-## Other Compute Services<a name="OtherCompServ"></a>
+## Other Compute Services <a name="OtherCompServ"></a>
 ECs, Fargate, ECR
 
 ### ECS - Elastic Container Service <a name="ECS"></a>
@@ -998,6 +997,8 @@ Preço baixo e previsível
 Notificações e monitoramento de recursos deployados
 Casos de uso: Web Applications(LAMP, Nginx..), Websites(Wordpress, Joomla..), Dev/Test environment
 Hight availability but no auto-scaling, limited Aws integrations
+Managed Mysql DB
+Virtual Private Server
 ```
 AWS Well-Architected Framework
 https://wa.aws.amazon.com/index.pt_BR.html
@@ -1045,7 +1046,105 @@ Security
 Fault Tolerance
 Service Limits
 
-# 4. O que cai na prova
+## Deployments & managing Infrastructure at Scale <a name="DeploymentsManag"></a>
+AWS CloudFormation:
+```
+Descreve e modela toda a sua infraestrutura na AWS utilizando um arquivo de texto ou linguagem de programação
+Possui um template para criação de recursos(yaml/Json), onde o usuário defini exatamente a conf que necessita.
+Ex.: Security group, S3 bucket, ELB
+Benefícios: IaC - sem recursos sendo mudados  manualmente, somente por código
+			Cost - cada recurso possui uma tagg identificando quanto isso custa
+				   fácil administração de custos com CloudFormationTemplate
+				   Possibilidade de automação com regras de ações(delete/save) 
+			Productive - declarative programming
+						 Diagram for the templates
+			Stack Designer - possível ver todos os recursos e seus relacionamentos para deploy de uma app de acordo com o template
+```
+
+Cloud Development Kit (CDK)
+```
+Modo de definir a infra da cloud atraves de uma linguaguem de porg familiar. (python,JS,Java,.Net)
+o código é compilado para o CloudFormation template(JSON/YAML)
+Casos de uso: Lambda e Docker in ECS/EKS
+```
+
+Elastic Beanstalk (Deploy de aplicações na web - PaaS):
+```
+deploy rapido, joga o codigo e ta prontos
+desenvolvedor que nao quer se preocupar com a infra
+utiliza o cloudformation para fazer a aplicação
+Suporte para: NOde, Go, Java, PHP,  Python...ou escrita de um template para a linguagem requerida
+
+Plataforma como Serviço, processo de provisionamento, gerenciamento, deploy, health-monitoring é automatizado pela Aws.
+Casos de uso: deploy de aplicações com pouco conhecimento de como fazer e com poucas personalizações necessárias.
+3 tipos: Single Instance - good for dev
+		 LoadBalancer+ ASG = ótimo para prod ou pré-prod web app
+		 ASG(auto scaling group) only: para aplicação não web(workers)
+Health agents enviam metricas para CloudWatch
+Can be used to monitor and to check the health of an environment.
+```
+
+CodeDeploy
+```
+Objetivo: meio de deploy(upgrade) de aplicações automaticamente
+Hybrid service (on premise e Aws)
+Trabalha com EC2 e On-Premises Servers
+```
+
+CodeCommit
+```
+Versionador de códigos da Aws
+comandos Git
+privada, segura e integrada com todos os serviços da Aws
+```
+
+CodeBuild
+```
+Pega os códigos do CodeCommit, prepara todos os pacotes necessários e faz o deploy.
+Serverless, pay-as-you-go, secure, scalable e higly available
+```
+
+CodePipeline
+```
+Orquestra todos os passos de um deploy subindo para Prod
+ex.: Code >> Build>>Test>>Provision>>Deploy
+Baseado em CI/CD
+Beneficios:CICD da Aws, mais rápido e integrado.
+```
+
+CodeArtifact
+```
+Artifact Management for software development
+place to store code dependecies
+```
+
+CodeStar
+```
+ Dashboard para: Desenvolvimento, compilação, implantação utilizando as outras ferramentas unificadas
+	•	Code Pega o código no CodeCommit, faz o build no CodeBuild e usa o CodeDeploy para deployar a aplicação (fluxo exemplo)
+```
+
+Cloud9 - Cloud IDE colaborativa da Aws, online e possibilita pair programming
+
+SSM - Systems Manager
+```
+Ajuda na administração de sistemas em Ec2 e On-premises
+Hybrid service
+Tem acesso ao status da sua infra através do SSM agent(instalavel em DC local, ja vem nas Ec2)
+Benefícios: Patching automation for enhance compliance
+			Rodar comandos entre toda a infra
+			Store parameter configuration pelo SSM Parameter Store
+			Roda em Windows e Linux OS
+```
+
+Aws OpsWork
+```
+Puppet e Chef para configurações de servidores automatizadas
+Great in EC2 e On-premises
+apenas standard Aws resourcers
+```
+
+##
 Qual é a ferramenta que pode ser utilizada para obter recomendações de performance, segurança e otimização de custos
 Suporte AWS x Trusted Advisor = Analise é limitada 
 
@@ -1061,6 +1160,7 @@ AWS Step Functions
   AWS Step Functions lets you build visual workflows that enable fast translation of business requirements into technical requirements.
   assincrono
 ```
+
 AWS CloudTrail
 Registra QUEM fez O QUE em QUAL RECURSO e QUANDO
 	•	Trilhas para eventos específicos (serviço, ação, usuário e etc)
@@ -1077,15 +1177,6 @@ Serviço de monitoração que monitora meus recursos na AWS
 	CloudWatch performs performance monitoring and can monitor custom metrics generated by applications and the operational health of your AWS resources
 
 CloudTrail x CloudWatch = Acesso a recursos x Monitoração dos recursos
-
-
-
-AWS DevTools
-Ferramentas de desenvolvimento
-
-	•	Cloud9 - IDE colaborativa
-	•	Code Pega o código no CodeCommit, faz o build no CodeBuild e usa o CodeDeploy para deployar a aplicação (fluxo exemplo)
-	•	CodeStar - Desenvolvimento, compilação, implantação utilizando as outras ferramentas unificadas
 
 AWS Elastic Beanstalk
 PaaS. Pós fornecimento do código, o mesmo se encarrega de provisionar a infra
@@ -1119,11 +1210,6 @@ Assincrono
 
 AWS SES
 Envio e recebimento de emails em alta escala (email MKT, email transacional, notificações e recebimento) e custo efetivo
-
-
-AWS CloudFormation
-Descreve e modela toda a sua infraestrutura na AWS utilizando um arquivo de texto ou linguagem de programação
-	•	CloudFormation design
 
 
 Security
@@ -1371,9 +1457,13 @@ A escalabilidade é a medida da capacidade de um sistema de crescer para acomoda
 AWS Artifact
 O AWS Artifact é sua primeira opção de recurso para informações relacionadas à conformidade que importam para você. Ele oferece acesso sob demanda aos relatórios de segurança e conformidade da AWS e a acordos online específicos.
 
-Quick Starts = faz o deploy para o usuario
+Quick Starts
+``` 
+= faz o deploy para o usuario
+Quick Starts are built by AWS solutions architects and partners to help you deploy popular technologies on AWS, based on AWS best practices for security and high availability.
+```
 Aws Outposts = ver o que é, conecta no onpremise e tem conexao na Aws com baixa latencia.
-Puppet e Chef = AwsOpsWork
+
 SCP = policy a nivel de conta
 
 loose coupling = microservicos independentes
@@ -1383,3 +1473,8 @@ CloudHSM
 ```
 Hardware Secrets Manager - Serve para o CLIENTE gerenciar suas próprias chaves KMS. Quando ele não quer que esse controle fique na mão da AWS. A AWS manda um aparelho FÍSICO pro cliente, o cliente conecta isso com a nuvem e esse aparelho gera as chaves.
 ```
+
+ACL = redes
+Security group = recursos
+SageMaker = data scientists to build, train, and deploy machine learning models
+Elastic IP addresses are for use in a specific region only and can therefore only be remapped between instances within that region. You can use Elastic IP addresses to mask the failure of an instance in one Availability Zone by rapidly remapping the address to an instance in another Availability Zone.
