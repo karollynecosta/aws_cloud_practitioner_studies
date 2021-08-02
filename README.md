@@ -18,6 +18,9 @@
 	3. [ECR](#ECR)
 	4. [Serverless](#Serverless)
 5. [Deployments & Managing Infra at Scale](#DeploymentsManag)
+6. [Cloud Integrations](#CloudInt)
+7. [Cloud Monitoring](#CloudMonitor)
+8. [VPC & Networking](#VPC)
 
 ## Introduction <a name="introduction"></a>
 Habilidades validadas pela certificação
@@ -99,6 +102,7 @@ Agility:
 
 ### Aws Global Infrastructure <a name="GlobalInfra"></a>
 Funcionamento da infraestrutrura de Cloud Computing
+Global application é uma aplicação disponível em vários países
 
 Regions and Availability:
 ```
@@ -113,7 +117,7 @@ Regions and Availability:
 		4 - features within a Region
 ```
 
-Edge Locations - CDN:
+Edge Locations - CDN(pontos de presença):
 ```
 	- CloudFront, modulos de entrega global de conteúdos
 	- Route53, DNS da Aws
@@ -123,13 +127,32 @@ Edge Locations - CDN:
 
 AWS NUNCA move/copia dados ou recursos entre regiões sem que o dono solicite isso explícitamente
 	•	AZ - Os DCs em cada região  (Em SP, 3 DCs)
-Alta disponibilidade, desempenho, tolerância a falhas, disaster recovery
+Alta disponibilidade, desempenho, tolerância a falhas, disaster recovery plan, attack protection
+
+Aws Outposts
+```
+Oferece a mesma infra, services, API e ferramentas para a applicação em DC on-premises, como se fosse na cloud
+Aws entrega e gerencia um "Outposts Racks" no DC, é um rack da Aws, que conecta no onpremise e tem conexao na Aws com baixa latencia.
+Usuário fica com a responsabilidade de cuidar da segurança do rack
+Benefícios: low-lattency to on-premises
+			local data processing
+			data residency
+			easier migration to the cloud
+```
+
+Aws WaveLength
+```
+Infraestrutura de servidores de telecomunicação para internet 5G
+Coloca serviços da Aws disponíveis como Ec2, EBS, VPC..
+Usuário conecta no 5G e tem acesso de baixa latencia aos serviços disponibilizados na WaveLenght Zone
+Casos de uso: Connected vehicles, interactive live video streams, real-time gaming
+```
 
 ### Understanding Cloud Economics <a name="CloudEconomics"></a>
 A melhor opção para quem não possui capital inicial e quer colocar sua aplicação no ar é o Pay-as-you-Go.
 
 Aws Cost Explorer:
-```bash
+```
 - Previsão de gastos
 - organizado por serviços e por tag
 - pode ser acessado via interface e por API
@@ -145,8 +168,9 @@ Aws Resource Tags:
 
 AWS Organizations:
 ```
-- Gerencia de multiplas contas através de uma conta master
-- Gestão de custos por conta
+Gerencia de multiplas contas através de uma conta master
+Gestão de custos por conta == volume discoounts
+caso tenha alguma Ec2 nao utilizada, sera compartilhado o recurso para quem precisa.
 ```
 
 Preços na AWS: 
@@ -191,13 +215,14 @@ Faz agrupamento do faturamento das contas
 ### Supporting Aws Infrastructure <a name="SupAwsInfra"></a>
 Ferramentas de suporte da Aws:
 ```
-	•	AWS Trusted Advisor - acesse as 7 principais verificações(Cost Optimization, Performance, Security, Fault Tolerance,Service Limits) e orientações do Trusted Advisor para provisionar seus recursos seguindo as práticas recomendadas para aumentar o desempenho e melhorar a segurança.
-
-	•	AWS Personal Health Dashboard - Uma visão personalizada da saúde dos serviços da AWS e alertas quando seus recursos são afetados. Este plano não oferece suporte a nenhuma orientação arquitetônica.
+	•	AWS Trusted Advisor - acesse as 7 principais verificações(Cost Optimization, Performance, Security, Fault Tolerance,Service Limits) e orientações do Trusted Advisor para provisionar seus recursos seguindo as práticas recomendadas para aumentar o desempenho e melhorar a segurança. checks security groups for rules that allow unrestricted access (0.0.0.0/0) to specific ports
 
 	- Assistentes para migrações vindo da Aws: Aws Quick Starts, Aws Partner Network Consulting Partness..
 
 	APN Consulting Partners are professional services firms that help customers of all sizes design, architect, build, migrate, and manage their workloads and applications on AWS
+
+	If you suspect that AWS resources are used for abusive purposes, contact the AWS Trust & Safety team using the Report Amazon AWS abuse form, or by contacting abuse@amazonaws.com. Provide all the necessary information, including logs in plaintext, email headers, and so on, when you submit your request.
+
 ```
 
 Planos de suporte AWS
@@ -209,8 +234,11 @@ Planos de suporte AWS
 	•	Business - a AWS recomenda o suporte de negócios se você tiver cargas de trabalho de produção na AWS e quiser acesso 24x7 por telefone, e-mail e chat para suporte técnico e orientação arquitetônica no contexto de seus casos de uso específicos. Você obtém acesso total às Verificações de práticas recomendadas do AWS Trusted Advisor. Você também obtém acesso ao Gerenciamento de eventos de infraestrutura por uma taxa adicional. Começa com $100.
 	Em caso de falha == Open a production system down support case
 
-	•	Enterprise - O AWS Enterprise Support oferece aos clientes serviços semelhantes aos de concierge, em que o foco principal é ajudar o cliente a alcançar seus resultados e ter sucesso na nuvem. Com o Enterprise Support, você obtém suporte técnico 24 horas por dia, 7 dias por semana, de engenheiros de alta qualidade, ferramentas e tecnologia para gerenciar automaticamente a integridade do seu ambiente, revisão consultiva e orientação com base em seus aplicativos e um Gerente Técnico de Conta (TAM) designado para coordenar o acesso ao proativo / programas preventivos e especialistas no assunto da AWS. Este plano oferece suporte à orientação arquitetônica contextual à sua aplicação.
+	•	Enterprise - O AWS Enterprise Support oferece aos clientes serviços semelhantes aos de concierge, em que o foco principal é ajudar o cliente a alcançar seus resultados e ter sucesso na nuvem. Com o Enterprise Support, você obtém suporte técnico 24 horas por dia, 7 dias por semana, de engenheiros de alta qualidade, ferramentas e tecnologia para gerenciar automaticamente a integridade do seu ambiente, revisão consultiva e orientação com base em seus aplicativos e um Gerente Técnico de Conta (TAM) designado para coordenar o acesso ao proativo / programas preventivos e especialistas no assunto da AWS. Este plano oferece suporte à orientação arquitetônica contextual à sua aplicação. 
+	Acesso a treinamentos com labs.
 
+Only the business and enterprise plans provide support via email, chat and phone.
+All support plans provide 24×7 access to customer service, documentation, whitepapers, and support forums.
 ```
 
 ### Cenários <a name="cenarios01"></a>
@@ -306,6 +334,10 @@ Iam Roles:
 ```
 Feito para serviços da Aws que precisam de específicas permissões
 Casos comuns: EC2 Intances, Lambdas, CloudFormation
+
+What are the benefits of using IAM roles for applications that run on EC2 instances?
+	Using IAM roles instead of storing credentials within EC2 instances is more secure
+	It is also easier to manage roles
 ```
 
 Iam Security Tools:
@@ -344,7 +376,7 @@ Reduced operational overhead
 Conceitos:
 	- Intance Types não podem ser alteradas em um downtime, algumas possuem capacidades únicas.
 
-	- Instance Store: Efemera
+	- Instance Store: temporary block-level storage for EC2, root storage
 	Um armazenamento de instância fornece armazenamento temporário em nível de bloco para sua instância. Esse armazenamento está localizado em discos fisicamente conectados ao computador host. Essa é uma boa opção quando você precisa de armazenamento com latência muito baixa, mas não precisa que os dados persistam quando a instância é encerrada ou pode aproveitar as arquiteturas tolerantes a falhas.
 
 	- EBS (Block Storage) - Disco de instâncias. Permite snapshots, é persistente.
@@ -352,11 +384,17 @@ Conceitos:
 	- AMI - Amazon Machine Image: Templates para EC2 com configurações e S.O. prontos para utilização, podendo ser personalizados.
 
 	- Modalidades de precificação:
-	    On demand - Pay-as-you-go, preços por hora, bom para ad-hoc
+	    On demand - Pay-as-you-go, preços por hora, bom para ad-hoc.
 	    Reservada - 1 ou 3 anos, desconto de até 75%, pagamento à vista, ou parte à vista parte mensal, somente mensal. Podem ser 	  Standart(maior desconto), Convertible ou Schedule.
-	    Spot - Leilão, cliente define um preço a pagar pela capacidade ociosa da AWS, se preço é aceito instância é provisionada, tempo de utilização limitada
-	    Dedicado (Servidor fisico e dedicado)- Preço por hora, descontos chegam a 70%, mas é a opção mais cara. Softwares com licença.
+	    Spot - Leilão, cliente define um preço a pagar pela capacidade ociosa da AWS, se preço é aceito instância é provisionada, tempo de utilização limitada.
+			Por exemplo, elas podem chegar a 90% de desconto se comparadas com uma instância sob-demanda (MEMORIZE isso);
+			Outras características são:
+			- Se a Amazon interromper a sua instância spot, você NÃO será tarifado;
+			- Se você parar ou encerrar a sua instância spot Linux, você será cobrado pelos segundos utilizados
+			- Se você parar ou encerrar a sua instância spot Windows, será cobrado pelas horas inteiras usadas e por uma hora completa da hora parcial interrompida.
 
+	    Dedicado (Servidor fisico e dedicado)- Preço por hora, descontos chegam a 70%, mas é a opção mais cara. Softwares com licença.
+	*On-demand, Reserved and Spot Amazon EC2 Linux instances are charged per second with a minimum charge of 1 minute.
 	* Se quiser que a instancia esteja sempre disponível: Stardart ou Convertible Reserved;
 	* Se possui serviços que não são afetados por uma possível interrupção da EC2 ==> Spot Instances
 	* Se possuir serviços com compliances específicas => Dedicated Host
@@ -367,6 +405,8 @@ Criação de instancias EC2:
 	•	Qtde de memória RAM
 	•	Tam e tipo de disco EBS (Encryption on Rest e Snapshots )
 	- Security Group para garantir o tráfegoin/out na instancia
+
+backup == AWS EC2 instances: taking EBS snapshots, creating AMIs, or designing an AWS Backup plan.
 
 Modelo de Segurança Compartilhada:
 	Aws: Compliance, isolação de hosts, infraestrutura
@@ -414,7 +454,9 @@ ELB: É o serviço de balanceamento de carga, gereciado pela AWS, com multiplos 
 Auto Scaling Groups(ASG): Capacidade de crescer o ambiente
 	•	Critérios: Grupos EC2 (configs) e Critério para escalar (CPU e Tráfego In/Out)
 	Vertical Scaling ==> Scale In: alocar mais recursos as instancias. limite de hardware.
+									changing the instance size of an EC2/RDS database to one with more CPU and RAM
 	Horizontal Scaling == Scale out: adição de instancias para lidar com o tráfego da app
+									 AWS Auto Scaling adding more EC2 instances
 	Estratégias dinamicas:		
 		Substitui Ec2 instáveis SEM MUDAR SEUS TIPOS
 		Definição de recursos mínimos e maximos para escalação de novos recursos. 
@@ -434,43 +476,23 @@ Serviço de DNS.
 Registro de domíniio, roteamento de DNS e verificação de integridade (verifica periodicamente se um recurso esta acessível, disponível e funcional)
 Global service Altamente disponível
 Possibilidade de configuração de failover, onde caso uma região de deploy caia, ele direciona para outra em correto funcionamento
+Tipos de policies:
+	Simple Routing Policy == no health checks
+	Weighted Routing Policy == is used to route traffic to multiple resources/intances in proportions that you specify. Possui health check.
+	Latency routing Policy == conf que permite baixa latencia para acesso em multiplas regioes 
+	Failover Routing Policy == Disaster Recovery, em caso de uma instancia cair ele redireciona para outra saudavel
+
+Recursos possíveis: Domain Registration, DNS, Health Checks, Routing Policy
 ```
 
-VPC:
+CloudFront - CDN:
 ```
-É a sua rede particular, isolada e privada dentro da AWS.
-Suporta IPv4 e IPv6, podendo ser pública ou privada, ou somente privada para quem tiver acesso a VPC
-É possível configurar: Range de IP, Subnets, Route tables, network gateways
-Suporta multiplos AZ
-A VPC spans all the Availability Zones in the region
-Tipos:
-	•	Padrão - Para cada conta AWS é criada uma rede padrão (VPC) com configs básicas pela própria AWS onde novas funcionalidades podem ser adicionadas
-	•	Não Padrão - O cliente cria de acordo com a sua necessidade para cada region
-
-Subredes (subnets):
-	A VPC cobre toda uma região e a subnet é uma ou mais subredes criadas em cada AZ
-		•	Route Tables - Controla o tráfego que sai das subnets
-		•	Internet Gateway - Permite que a VPC tenha acesso a internet
-		•	NAT Gateway - Permite que subnets tenham acesso a internet
-		•	Network Acess Control List (NACL) - Controla acesso a subnets, allow/ deny ryle, atinge todos os recursos
-		•	Security Groups - O firewall, allow rules, somente alguns recursos
-```
-
-AWS Transit Gateway
-```
- is a service that enables customers to connect their Amazon Virtual Private Clouds (VPCs) and their on-premises networks to a single gateway.
-```
-Aws Direct Connect:
-```
-	Facilita a conexão entre um DC local diretamente para a Aws, sem exposição do tráfico.
-	Mesma região
-```
-
-CloudFront:
-```
-É o CDN e trabalha com Edge Locations (parceiros onde não existirem Regions). 
-Acelera a entrega de conteúdo
+É o CDN e trabalha com Edge Locations. 
+Acelera a entrega, conteudo em cache at the edge
 Inclui camadas de segurança(WAF, Shield for DDoS)
+Great for static content that must be available everywhere
+
+Origens: S3 Bucket + OAI, Custom Origin(HTTP) - Ec2/S3 Website/Application Load Balancer
 ```
 
 API Gateway:
@@ -486,7 +508,11 @@ AWS Global Accelerator:
 ```
 O AWS Global Accelerator é um serviço de rede que envia o tráfego do seu usuário por meio da infraestrutura de rede global do Amazon Web Service(Edge), melhorando o desempenho do usuário da Internet em até 60%.
 Não confia em resolução de DNS, pois é bseado em IP para acesso.
-Casos de Uso: Serviços que não usam HTTP = UDP, Voip. IP Estático. Melhores táticas de failover.
+Casos de Uso: Serviços que não usam UDP, Voip. IP Estático. Melhores táticas de failover.
+
+Improve global application availability and performance, connect to Edge location and they will be send the traffic
+2 statics IP sao necessarios 
+no caching
 ```
 
 ### File Storage Services <a name="FileStorageServ"></a>
@@ -504,6 +530,9 @@ Multipos tipos  de volumes:
 	SSD Prov IOPS - Permite definir IOPS DB (io1)
 	Throughput Optimized HDD - Disco magnetico alta taxa de transferência BigData (st1)
 	Cold HDD - Arquivo (sc1)
+	Provisioned IOPS SSD supports up to 50 IOPS per GiB with up to 32,000 IOPS per volume
+	General purpose SSD supports 3 IOPS per GiB and can burst up to 3000 IOPS (volumes > 334GB), and a maximum of 16,000 per volume
+	The HDD options provide much lower IOPS per volume (500, 250)
 snapshot in s3
 ```
 
@@ -531,11 +560,12 @@ Hospedando um site estático em um S3 Bucket Websites:
 		Politica de acesso (policy)
 		Versionamento - habilitada via propriedades do bucket, protege de remoção de arquivos inesperada/erronea via restore version. Possibilidade de rollback. 
 		Criptografia
-	•	Cross-Region Replication - Objetos de um bucket de uma região para outra. 
+	•	S3 Cross-Region Replication - Objetos de um bucket de uma região para outra. Bom para conteudo dinamico que precisa ser acessado com baixa latencia.
 ```
 
 Durability == em quanto tempo voce pode perder o arquivo, +-10 mil anos em média
 Availability == o quão está disponível, varia dependendo da classe e pode ficar até 53min indisponivel ao ano.
+S3 provides strong read-after-write consistency == for PUTs and DELETEs of objects in your Amazon S3 bucket in all AWS Regions. This applies to both writes to new objects as well as PUTs that overwrite existing objects and DELETEs.
 
 Amazon S3:
 Classes de armazenamento (6 storage class):
@@ -559,7 +589,7 @@ Classes de armazenamento (6 storage class):
 4 - One Zone IA: 
 		dados não acessados frequentemente
 		mas hospedado em apenas uma zona de disponibilidade.
-		menor disponibilidade
+		disponivel sempre que necessario, HA
 		20% mais barato que S3-IA
 		Caso de uso: backup secundário de BD on-premise, armazenamento de arquivos que podem ser recriados.
 ```
@@ -567,6 +597,7 @@ Classes de armazenamento (6 storage class):
 Storages para Backup:
 5 - Glacier (Object Storage):
 ```
+Data encryption is automatcally enabled
  Archiving. Acesso não imediato. 
  Ideal para objetos que você não usa mais, objetos arquivados, backups e arquivos retidos por quetões legais.
  Possibilidade de configuração de quando esses dados podem ser acessados, 90 dias  mínimo.
@@ -575,6 +606,9 @@ Storages para Backup:
 	Expedited - 1/5 min
 	Standard - 3/5h
 	Bulk - 5/12h
+Cobrado:  you pay for storage on a per GB / month basis
+		  retrieval requests and quantity (based on expedited, standard, or bulk)
+		  and data transfer out of Glacier
 ```
 
 6 - S3 Glacier Deep Archive:
@@ -606,6 +640,7 @@ Mover/Deletar entre diferentes classes de acordo com o tempo e frequencia de ace
 
 S3 Transfer Acceleration:
 ```
+Accelerate global uploads & downloads into S3
 Transf. de grandes quantidades de dados em uma distância (region) muito longa (Alocado em Edge Location (Cloudfront)) de forma mais ágil.
 ```
 
@@ -618,6 +653,7 @@ Storage Gateway (Armazenamento híbrido)
 	Amazon FSx File Gateway,
 	Tape Gateway e Volume Gateway
 The Gateway Virtual Tape Library can be used with popular backup software such as NetBackup, Backup Exec and Veeam.
+Data encryption automaticaly
 ```
 
 Cross-Account Access via Bucket Policy:
@@ -812,6 +848,7 @@ ElastiCache
 In-memory databases com alta permofomance e baixa latencia
 Ajuda a reduzir o trafego no RDS, pois aproveita resultados ja obtidos anteriormente.
 Arquitetura == EC2 Instances + Read/Write RDS + Read/write ElastiCache In-memory
+Oferece Redis e Memcached 
 ```
 
 EMR
@@ -880,7 +917,10 @@ ETL
 Glue data catalog == central repository to store stuctural and operational metadata for all data assets.
 ```
 
-Amazon Simple Workflow Service (SWF) is a web service that makes it easy to coordinate work across distributed application components. SWF enables applications for a range of use cases, including media processing, web application back-ends, business process workflows, and analytics pipelines, to be designed as a coordination of tasks.
+Amazon Simple Workflow Service (SWF)
+```
+ is a web service that makes it easy to coordinate work across distributed application components. SWF enables applications for a range of use cases, including media processing, web application back-ends, business process workflows, and analytics pipelines, to be designed as a coordination of tasks.
+```
 
 DMS
 ```
@@ -1000,6 +1040,7 @@ Hight availability but no auto-scaling, limited Aws integrations
 Managed Mysql DB
 Virtual Private Server
 ```
+
 AWS Well-Architected Framework
 https://wa.aws.amazon.com/index.pt_BR.html
 
@@ -1007,9 +1048,10 @@ Documenta as melhores práticas para a utilização em cloud mais específicamen
 
 5 pilares
 
-Operacional Excellence - Executar e monitorar sistemas para entregar valor empresarial e melhorar continuamente processos e procedimentos.
+Operacional Excellence - Executar e monitorar sistemas para entregar valor empresarial e melhorar continuamente processos e procedimentos. Iac
 	•	Principais tópicos: Gerenciamento e automação de alterações, reação a eventos e definição de padrões para gerenciar com êxito as operações diárias
 	•	Principais serviços: AWS Config, Amazon CloudWatch, AWS CloudFormation
+	ex.: IaC
 
 Security - Proteção de sistemas
 	•	Principais tópicos: Confidencialidade e integridade de dados, identificação e gerenciamento de quem pode fazer o quê com o gerenciamento de privilégios, proteção de sistemas e estabelecimento de controles para detectar eventos de segurança
@@ -1022,6 +1064,7 @@ Reliability - Capacidade de evitar e se recuperar rapidamente das falhas para a
 				  Automatically recoring from failure
 				  Use AWS Conﬁg to generate an inventory of AWS resources
 				  Use AWS CloudTrail to record AWS API calls into an auditable log ﬁle
+				  RDS + Multi-AZ
 
 Perfomance Efficiency - Uso eficiente de recursos de TI e computação
 	•	Principais tópicos: Seleção dos tipos e todos tamanhos certos dos recursos tomando como base os requisitos de carga de trabalho, a performance do monitoramento e a tomada de decisões funcdamentadas para manter a eficiência à medida que as necessidades comerciais evoluem
@@ -1144,15 +1187,284 @@ Great in EC2 e On-premises
 apenas standard Aws resourcers
 ```
 
-##
-Qual é a ferramenta que pode ser utilizada para obter recomendações de performance, segurança e otimização de custos
-Suporte AWS x Trusted Advisor = Analise é limitada 
+## Cloud Integrations <a name="CloudInt">
+Quando ha integracao entre +1 applicacao, existem 2 padroes de comunicacao:
+	1 - Sync comm (app to app)
+	2 - Async / Event Base (app to queue to app)
 
-Security Group
-Firewall propriamente dito
+AWS SNS  - Simple Notification Server
+```
+Uma msg para varios recebedores com Pub/Sub
+Serviço de notificação da AWS. 
+Divide-se em Publicador, tópico e assinantes (Lambda, email, SQS, SMS, HTTP/s)
 
+Notification, subscribers, publishers...=SNS
+Sem tempo de retencao
+```
 
-AWS Integrated Services
+AWS SQS - Simple Queue Service
+```
+Serviço de filas de mensagens (mensageria).
+Divide-se em Produtor e consumidor
+Assincrono, Serverless - decouple application
+Tempo max de retencao = 4 - 14 dias
+ilimitado numero de msg
+send, store, and receive messages between software components at any volume, without losing messages or requiring other services to be available
+```
+
+Aws Kinesis
+```
+Real-time big data streaming
+
+Servico de coleta, processamento e analise de streaming real-time em qualquer escala
+Tipos: Kinesis Data Stream == low lattency sreaming to ingest data
+	  Kinesis DAta Firehouse == load streams into S3, Redshift, ElasticSearch
+	  Kinesis DAta Analytics == perfom real-time analytics on streams using SQL
+	  Kinesis Video Streams == monitor real-time video streams for analytics or ML
+
+```
+
+Amazon MQ - Managed Apache ActiveMQ
+```
+Servico alternativo para migracao de Dc on-premises sem utilizar SQS e SNS
+utilizando de protocolos abertos como MQTT...
+```
+
+SQS + SNS = Decouple applications
+
+AWS SES
+Envio e recebimento de emails em alta escala (email MKT, email transacional, notificações e recebimento) e custo efetivo
+
+## Cloud Monitoring <a name="CloudMonitor">
+
+CloudWatch
+```
+Serviço de monitoração dos recursos na AWS
+Collect, Monitor, act and Analyse
+Ações - CloudWatch Events para responder a eventos como a partir de um problema de performance eu executar o Auto Scaling e adicionar mais máquinas
+
+Metrics:
+	é uma varável de monitoramento (CPUUtilization, NetworkIn...)
+	have timestamps
+	possui dashboards para visualizacao das metricas
+	EC2 instances: CPU Utilization, Status check, network(not RAM)
+					Basic monitoring collects metrics every 5 minutes 
+					detailed monitoring collects metrics every 1 minute
+	EBS volumes: disk read/write
+	S3 buckets: BucketSizeBytes, Number OfObjects, AllRequests
+	Billing: Total Estimated Charged(only in us-east-1)
+	Service Limits: o quanto esta usando a API
+	Custom metrics: metricas personalizadas 
+
+Alarms:
+	Utilizados para triggar notifications por alguma metrica
+	Actions:
+		Auto Scaling: increase // decrease Ec2 
+		EC2 actions: stop, terminate, reboot or recovery
+		SNS Notifications: send a notification into an SNS topic
+	ex. = Biling Alarm
+
+Logs:
+	Colecao de logs
+	Pode chegar em:
+		Elastic Beanstalk = logs from application
+		ECS == logs from containers
+		Aws Lambda == function logs
+		CloudTrail based on filter
+		CloudWatch log agents == on Ec2 or on-premises servers, com permissoes atraves de role
+	Real-time monitoring
+	Retencao ajustavel
+
+Events:
+	Feito para reagir a eventos na Aws
+	Schedule: Cron jobs (scheduled scripts)
+	Event Patterns: event rules to react to a service doing something
+	Trigger Lambda functions, send SQS/SNS messages
+
+EventBridge:
+	Evolucao do Events
+	Default Event bus = eventos gerados automaticamente por Aws services
+	Partner event bus = recebimento de eventos de Datagod, ZenDesk..
+	Custom Event buses = para app proprias
+	Schema Registry = model event schema
+
+	Amazon CloudWatch is a monitoring service for AWS cloud resources and the applications you run on AWS. 
+	CloudWatch performs performance monitoring and can monitor custom metrics generated by applications and the operational health of your AWS resources
+```
+
+AWS CloudTrail
+```
+Registra QUEM fez O QUE em QUAL RECURSO e QUANDO atraves de Console/SDK/CLI/Aws Services
+Provides governance, compliance and audit
+Enabled by default!
+Pode ser aplicado em todas as regioes ou em so uma
+	•	Trilhas para eventos específicos (serviço, ação, usuário e etc)
+	•	Pode ser armazenado no S3 para analises futuras, auditoria e Insights com AWS Athena
+	•	Pode ser integrado com Lambda, CloudWatch logs e events (se algum recurso na AWS sofre uma alteração, eu disparo um evento e a partir desse evento uma ação)
+
+Tipos de eventos:
+	Management Events == operations that are performed on resources in Aws, can separete Read Events(don't modify) from Write Events(modify)
+	Data Events = nao vem habilitado, pode ser direcionado para S3
+	Insights Events = detect unusual activity in account, analyzes normal management events to create a baseline and analyzes write events.
+
+Retention:
+	Default = 90 dias
+	+90 dias == S3 bucket long-term retention, consultado via athena
+```
+
+AWS X-Ray
+```
+Debugging in Prod with Visual Analysis of our app
+Analise de comportamento e rastreamento completo de aplicações distribuídas (diversos serviços/microserviços)
+	•	Traces - A coleta de cada chamada realizada pela aplicação
+	•	Instrumentação - Aplicativos usados no EC2, ECS, Lambda e Beanstalk
+	•	Suporte node.js, Java e .NET
+	•	Detecção de latência do lado servidor e cliente
+Beneficios: 
+	Troubleshooting performance
+	understand dependencies in a microservice 
+	indentify users that are impacted
+```
+
+CodeGuru
+```
+Faz analise do  codigo automatizada e dá dicas de melhorias
+Tipos:
+	Reviewer = automated code reviews for static code analysis (dev)
+				identify critical issues, security vulnerabilities
+				Supports Java e Python
+	Profiler= visibility/recommendations about app perfomance during runtime(prod)
+			  identify if app is consuming excessive CPU capacity on logging routine
+			  Support applications running on Aws or on-premise
+
+```
+
+AWS Service Health Dashboard
+```
+ Uma visão personalizada da saúde dos serviços da AWS. 
+ Mostra histórico de informações
+ General status Aws services
+ opção de RSS
+```
+
+Aws Personal Health dashboard
+```
+Provem alertas e guia de remediação quando a Aws está tendo algum evento que impacte seus serviços.
+Personalized view into the performancce and availability of the Aws services underlying your Aws resources.
+Dashboard com alertas em tempo para prover notificações proativas, ajudando a agendar atividades.
+```
+
+## VPC & Network <a name="VPC"></a>
+VPC:
+```
+É a sua rede particular, isolada e privada dentro da AWS.
+Suporta IPv4 e IPv6, podendo ser pública ou privada, ou somente privada para quem tiver acesso a VPC
+É possível configurar: Range de IP, Subnets, Route tables, network gateways
+Suporta multiplos AZ
+A VPC spans all the Availability Zones within the region
+Tipos:
+	•	Padrão - Para cada conta AWS é criada uma rede padrão (VPC) com configs básicas pela própria AWS onde novas funcionalidades podem ser adicionadas
+	•	Não Padrão - O cliente cria de acordo com a sua necessidade para cada region
+
+Subredes (subnets):
+	A VPC cobre toda uma região e a subnet é uma ou mais subredes criadas em cada AZ
+		•	Route Tables - Controla o tráfego que sai das subnets
+		•	Internet Gateway - Permite que a VPC tenha acesso a internet
+		•	NAT Gateway - Permite que subnets tenham acesso a internet
+		•	Network Acess Control List (NACL) - Controla acesso a subnets, allow/ deny ryle, atinge todos os recursos
+		•	Security Groups - O firewall, allow rules, somente alguns recursos
+	Public subnet = is accessible from the internet, have a route to the internet gateway
+	Private Subnet = is  not accessible from the internet, have a route to NAT Gateway to access the internet white remaining private
+
+Route Tables: define acesso para a internet entre as subnets
+
+NAT gateways are managed for you by AWS. NAT gateways are highly available in each AZ into which they are deployed. They are not associated with any security groups and can scale automatically up to 45Gbps
+
+NAT instances are managed by They must be scaled manually and do not provide HA. NAT Instances can be used as bastion hosts and can be assigned to security groups
+
+Within the management console for VPC you can manage items such as subnets and the IP CIDR block for the VPC
+
+The options available in the VPC Wizard are:
+	– VPC with a Single Public Subnet
+	– VPC with Public and Private Subnets
+	– VPC with Public and Private Subnets and Hardware VPN Access
+	– VPC with a Private Subnet Only and Hardware VPN Access
+```
+
+AWS Transit Gateway
+```
+ is a service that enables customers to connect their Amazon Virtual Private Clouds (VPCs) and their on-premises networks to a single gateway.
+
+ For having transitive peering between thousands od VPC and on-premises, hub-and-spoke (star) connection.
+One sigle gateway to provide this func
+works with Direct Connect Gateway, VPN connections 
+```
+
+Aws Direct Connect(DX):
+```
+Facilita a conexão entre um DC local diretamente para a Aws, sem exposição do tráfico.
+Mesma região
+connection is PRIVATE, secure and fast
+Leva no minimo 1 mes para a conexão ser estabelecida
+Benefits:
+	– Reduce cost when using large volumes of traffic
+	– Increase reliability (predictable performance)
+	– Increase bandwidth (predictable bandwidth)
+	– Decrease latency
+```
+
+Aws Site to Site VPN
+```
+Connect an on-premises VPN to Aws
+automatically encrypted
+over the PUBLIC internet
+limit bandwitch
+On-premises: must use a CGW - Customer Gateway
+Aws: use Virtual Private Gateway (VGW)
+```
+
+Network ACL (Subnets) & Security Group(Ec2)
+```
+NACL: Firewall propriamente dito,
+	  controle o trafico in/out das SUBNETS
+	  allow/deny rules
+	  Rules only include IP addresses
+	  is stateless: return traffic must be explicitly allowed by rules
+	  
+
+Security group = Firewall que controle o trafico in/out de ENI(Elastic Network Interface)/EC2
+				 Only Allow rules
+				 Rules include Ip + other security groups
+				 is stateful: return traffic is automatically allowed, regardless of any rules
+```
+
+VPC Flow logs
+```
+Captura informações sobreo trafico de IP nas interfaces: VPC Flow Logs, Subnet Flow logs, ENI Flow Logs
+helps to monitor & troubleshoot connectivity issues
+Ex.: Subnets to internet
+
+pode ser exportado para S3 ou CloudWatch
+```
+
+VPC Peering
+```
+Conecta 2 VPC privadamente usando Aws network
+make them behave as if they were in the same network
+Must not have overlapping CIDR(Ip range)
+Is not transitive(must be established for each VPC that need)
+```
+
+VPC Endpoints
+```
+Allow you to connect to Aws Services using a private network instead of the public www network
+gives enhance security and lower latency to access AwsServices
+
+2 tipos:
+	Endpoint Gateway - S3 & DynamoDB
+	Endpoint Interface - therest
+
+```
 
 AWS Step Functions
 ```
@@ -1161,55 +1473,29 @@ AWS Step Functions
   assincrono
 ```
 
-AWS CloudTrail
-Registra QUEM fez O QUE em QUAL RECURSO e QUANDO
-	•	Trilhas para eventos específicos (serviço, ação, usuário e etc)
-	•	Pode ser armazenado no S3 para analises futuras, auditoria e Insights com AWS Athena
-	•	Pode ser integrado com Lambda, CloudWatch logs e events (se algum recurso na AWS sofre uma alteração, eu disparo um evento e a partir desse evento uma ação)
-
-CloudWatch
-Serviço de monitoração que monitora meus recursos na AWS
-	•	Collect, Monitor, act and Analyse
-	•	Ações - CloudWatch Events para responder a eventos como a partir de um problema de performance eu executar o Auto Scaling e adicionar mais máquinas
-	Basic monitoring collects metrics every 5 minutes 
-	detailed monitoring collects metrics every 1 minute
-	Amazon CloudWatch is a monitoring service for AWS cloud resources and the applications you run on AWS. 
-	CloudWatch performs performance monitoring and can monitor custom metrics generated by applications and the operational health of your AWS resources
-
 CloudTrail x CloudWatch = Acesso a recursos x Monitoração dos recursos
+
 
 AWS Elastic Beanstalk
 PaaS. Pós fornecimento do código, o mesmo se encarrega de provisionar a infra
 
-AWS X-Ray
-Analise de comportamento e rastreamento completo de aplicações distribuídas (diversos serviços/microserviços)
-	•	Traces - A coleta de cada chamada realizada pela aplicação
-	•	Instrumentação - Aplicativos usados no EC2, ECS, Lambda e Beanstalk
-	•	Suporte node.js, Java e .NET
-	•	Detecção de latência do lado servidor e cliente
 
 AWS Rekognition
+```
 Analise de imagens e videos utilizando Machine Learning retornando informações categorizadas e classificadas
+Amazon Rekognition makes it easy to add image and video analysis to your applications
+```
 
 AWS Config
 ```
-Serviço que fornece uma visão detalhada da configuração dos recursos da AWS em sua conta da AWS. Qualquer recurso que esteja habilitado na AWS, essa configuração é registrada e pode ser gerênciada via AWS Config.
+Serviço que fornece uma visão detalhada da configuração dos recursos da AWS em sua conta da AWS.
+Qualquer recurso que esteja habilitado na AWS, essa configuração é registrada e pode ser gerênciada via AWS Config.
 	•	Configurações presentes e passadas
-	•	Avaliação de recursos com regras - Avalia se um recurso esta em conformidade com uma regra de configuração. Regras Gerenciadas são criadas e mantidas pela AWS. Regras Personalizadas são regras criadas pelo cliente.
+	•	Avaliação de recursos com regras - Avalia se um recurso esta em conformidade/COMPLIANCE com uma regra de configuração. Regras Gerenciadas são criadas e mantidas pela AWS. Regras Personalizadas são regras criadas pelo cliente.
 ```
 
-# 5. O que cai na prova
 Principais casos de uso do AWS Config: Administração de recursos, auditoria e compatibilidade, Gerenciar e solucionar problemas e análise e segurança
 
-AWS SNS
-Serviço de notificação da AWS. Divide-se em Publicador, tópico e assinantes (Lambda, email, SQS, SMS, HTTP/s)
-
-AWS SQS
-Serviço de filas de mensagens (mensageria). Divide-se em Produtor e consumidor
-Assincrono
-
-AWS SES
-Envio e recebimento de emails em alta escala (email MKT, email transacional, notificações e recebimento) e custo efetivo
 
 
 Security
@@ -1296,8 +1582,6 @@ Region
 
 Aurora
 Cresce o armazenamento de forma automática
-
-
 
 EBS (Modelo de segurança compartilhada)
 Cliente cria snapshot
@@ -1408,7 +1692,10 @@ Converte automaticamente fala em texto
 Amazon Polly 
 Amazon Polly é um serviço que transforma texto em fala real, permitindo que você crie aplicativos que falam e construa categorias inteiramente novas de produtos habilitados para fala.
 
-
+Amazon Elastic Transcoder
+```
+ is a highly scalable, easy to use and cost-effective way for developers and businesses to convert (or “transcode”) video and audio files from their source format into versions that will playback on devices like smartphones, tablets and PCs
+```
 
 Which of the following AWS services support reservations to optimize costs? (Select three)
 Serviços com possibilidade reserved
@@ -1455,18 +1742,20 @@ Scalability
 A escalabilidade é a medida da capacidade de um sistema de crescer para acomodar um aumento na demanda ou diminuir para uma demanda decrescente.
 
 AWS Artifact
+```
 O AWS Artifact é sua primeira opção de recurso para informações relacionadas à conformidade que importam para você. Ele oferece acesso sob demanda aos relatórios de segurança e conformidade da AWS e a acordos online específicos.
-
+Reports to download AWS security and compliance documents, such as AWS ISO certifications, Payment Card Industry (PCI), and System and Organization Control (SOC) reports
+```
 Quick Starts
 ``` 
 = faz o deploy para o usuario
 Quick Starts are built by AWS solutions architects and partners to help you deploy popular technologies on AWS, based on AWS best practices for security and high availability.
 ```
-Aws Outposts = ver o que é, conecta no onpremise e tem conexao na Aws com baixa latencia.
 
 SCP = policy a nivel de conta
 
-loose coupling = microservicos independentes
+loose coupling = microservicos independentes, SQS.IT systems should ideally be designed in a way that reduces inter-dependencies. Your components need to be loosely coupled to avoid changes or failure in one of the components from affecting others. 
+
 TCO == you need to document all of the costs you’re incurring today to run your IT operations. That includes facilities equipment installation and data center security costs. That way you get to compare the full cost of running your IT on-premises today, to running it in the cloud.
 
 CloudHSM
@@ -1474,7 +1763,50 @@ CloudHSM
 Hardware Secrets Manager - Serve para o CLIENTE gerenciar suas próprias chaves KMS. Quando ele não quer que esse controle fique na mão da AWS. A AWS manda um aparelho FÍSICO pro cliente, o cliente conecta isso com a nuvem e esse aparelho gera as chaves.
 ```
 
-ACL = redes
-Security group = recursos
 SageMaker = data scientists to build, train, and deploy machine learning models
 Elastic IP addresses are for use in a specific region only and can therefore only be remapped between instances within that region. You can use Elastic IP addresses to mask the failure of an instance in one Availability Zone by rapidly remapping the address to an instance in another Availability Zone.
+U2F security = hardware MFA 
+Aws MArketplcae = Sell SaaS solutions to Aws customers
+Cost Management = pesquisar
+HIPAA = protected health information
+AWS Managed Services manages the daily operations of your AWS infrastructure in alignment with ITIL processes. AWS Managed Services provides a baseline integration with IT Service Management (ITSM) tools such as the ServiceNow platform.
+
+AWS IoT Core
+```
+ is a managed cloud service that lets connected devices easily and securely interact with cloud applications and other devices. AWS IoT Core can support billions of devices and trillions of messages, and can process and route those messages to AWS endpoints and to other devices reliably and securely.
+ ```
+
+Asynchronous integration
+```
+is a form of loose coupling between services. This model is suitable for any interaction that does not need an immediate response and where an acknowledgement that a request has been registered will suffice.
+Amazon Simple Queue Service (SQS) and Amazon Step Functions both provide asynchronous integration. SQS provides a durable message bus and Step Functions is an orchestrated workflow service.
+```
+
+What AWS services can be used that don’t require you to make any capacity decisions upfront?
+```
+With Amazon S3 you don’t need to specify any capacity at any time, the service scales in both capacity and performance as required
+AWS Lambda lets you run code without provisioning or managing servers. You pay only for the compute time you consume – there is no charge when your code is not running
+```
+
+which AWS services can scale automatically without intervention?
+```
+Both S3 and DynamoDB automatically scale as demand dictates. In the case of DynamoDB you can either configure the on-demand or provisioned capacity mode. With on-demand capacity mode DynamoDB automatically adjusts the read and write throughput for you
+```
+
+Which cloud model should a company use for an application that has a requirement for a bespoke, specialized hardware configuration?
+```
+PRIVATE
+You cannot choose the hardware stack in the public cloud so if you have an application that requires access to bespoke, specialized hardware you need to build it on-premise in a private cloud
+```
+
+Resource Group
+```
+A resource group is a collection of resources that share one or moretags or portions of tags. To create a resource group, you simply identify the tags that contain the items that members of the group should have in common
+```
+
+AWS Migration Hub
+```
+ provides a single location to track the progress of application migrations across multiple AWS and partner solutions. Using Migration Hub allows you to choose the AWS and partner migration tools that best fit your needs, while providing visibility into the status of migrations across your portfolio of applications. This includes AWS Database Migration Service, AWS Server Migration Service, and partner migration tools
+ ```
+
+AWS components aid in the construction of fault-tolerant applications = AMIs Elastic IP Address
